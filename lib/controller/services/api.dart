@@ -133,7 +133,7 @@ class ApiController {
   final TextEditingController passwordNewController = TextEditingController();
   final TextEditingController rolNewController = TextEditingController();
   
-  Future<int?> registrarUsuarioDistri() async {
+  Future<int?> registrarUsuarioDistri(String token) async {
     try {
       
       Map<String, String> rolesMap = {
@@ -156,8 +156,10 @@ class ApiController {
 
       print(regBodyActivo);
 
+      print("$registerUserUrl$token");
+
       var response = await http.post(
-        Uri.parse(registerUserUrl),
+        Uri.parse("$registerUserUrl/$token"),
         headers: {
           "Content-Type": "application/json",
         },
@@ -253,23 +255,16 @@ class ApiController {
     return null;
   }
 
-  Future<Map<String, dynamic>> obtenerUsuariosDistri(String rol) async {
+  Future<Map<String, dynamic>> obtenerUsuariosDistri(String rol, String token) async {
     try {
       
-
-      Map<String, dynamic> regBody = {
-        "ou": rol,
-
-      };
-
-      print(regBody);
+ 
 
       var response = await http.post(
-        Uri.parse(obtenerUserUrl),
+        Uri.parse("$obtenerUserUrl/$rol/$token"),
         headers: {
           "Content-Type": "application/json",
         },
-        body: jsonEncode(regBody),
       );
 
       var jsonRegisterResponse = jsonDecode(response.body);

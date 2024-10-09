@@ -1,7 +1,9 @@
 import 'package:districorp/constant/images.dart';
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
+import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/controller/services/api.dart';
+import 'package:districorp/models/usuarios_models.dart';
 import 'package:districorp/screen/admin/Panel_a%C3%B1adir_usuarios.dart';
 import 'package:districorp/screen/admin/Panel_actualizar_usuarios.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
@@ -37,22 +39,36 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
   }
 
   // Función para obtener usuarios desde la API
+
+     Map<String, String> rolesMap = {
+        "Employee": "Empleados",
+        "User": "Usuarios",
+    };
+
+
   Future<void> fetchUsers() async {
     try {
-      var response = await apiController.obtenerUsuariosDistri(widget.tipoOu);
-      var jsonResponse = response['users'] as List;
-      List<Map<String, dynamic>> fetchedUsers = jsonResponse.map((user) {
-        return {
-          'name': user['name'] + " " + user['surname'],
-          'email': user['email'],
-          'phone': user['phone'],
-        };
-      }).toList();
+      // Accedemos al TokenProvider para obtener el token
+      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+      final token = await tokenProvider.verificarTokenU(); // Obtener el token usando el Provider
+      if (token != null) {
+        var response = await apiController.obtenerUsuariosDistri(widget.tipoOu, token);
+        var jsonResponse = response['users'] as List;
+        List<Map<String, dynamic>> fetchedUsers = jsonResponse.map((user) {
+          return {
+            'name': user['name'] + " " + user['surname'],
+            'email': user['email'],
+            'phone': user['phone'],
+          };
+        }).toList();
 
-      setState(() {
-        users = fetchedUsers;
-        filteredUsers = fetchedUsers; // Inicialmente mostrar todos los usuarios
-      });
+        setState(() {
+          users = fetchedUsers;
+          filteredUsers = fetchedUsers; // Inicialmente mostrar todos los usuarios
+        });
+        
+      }
+
     } catch (e) {
       print("Error al obtener usuarios: $e");
     }
@@ -74,13 +90,14 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final employeeProvider = Provider.of<EmpDashboardProvider>(context);
-
+    String? rolTipoConvertido = rolesMap[widget.tipoOu];
+    
     return Stack(
       children: [
         Column(
           children: [
             Text(
-              "Gestionar Usuarios",
+              "Gestionar $rolTipoConvertido",
               style: TextStyle(fontSize: cTitulosSize, fontWeight: FontWeight.bold),
             ),
             Padding(
@@ -109,8 +126,13 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                           phone: filteredUsers[index]['phone']!,
                           onUpdate: () {
                             employeeProvider.updateSelectedUserManagement(3);
+                            
+                            // Convertir el Map en una instancia de Usuarios
+                            Usuarios user = Usuarios.fromJson(filteredUsers[index]);
+
+                            employeeProvider.updateSelectedUser(user);
                             Get.to(() => MainPanelActualizarUserPage(
-                                  email: filteredUsers[index]['email']!,
+                                  
                                 ));
                           },
                           onDelete: () {

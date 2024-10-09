@@ -9,6 +9,7 @@ import 'package:districorp/screen/Employee/Panel_streaming_empleado.dart';
 import 'package:districorp/screen/Employee/widgets/home_page_empleado.dart';
 import 'package:districorp/screen/admin/Panel_a%C3%B1adir_usuarios.dart';
 import 'package:districorp/screen/admin/Panel_actualizar_usuarios.dart';
+import 'package:districorp/screen/admin/Panel_gestionar_empleados.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
 import 'package:districorp/screen/admin/Panel_principal_admin.dart';
 import 'package:districorp/screen/Login/login_screen.dart';
@@ -72,11 +73,12 @@ class MyApp extends StatelessWidget {
             '/LoginScreen': (context) => const LoginScreen(),
 
             '/MainPanelPage': (context) => MainPanelPage(
-                  child: AdminUserManagementPage(tipoOu: 'Employee',),
+                  child: AdminUserManagementPage(tipoOu: 'User',),
                 ),
+            '/MainPanelAdminEmployeePage': (context) => MainPanelAdminEmployeePage(),
             '/MainPanelActualizarUserPage': (context) =>
                 MainPanelActualizarUserPage(
-                  email: '',
+                
                 ),
             '/MainPanelAddUserPage': (context) => MainPanelAddUserPage(),
 

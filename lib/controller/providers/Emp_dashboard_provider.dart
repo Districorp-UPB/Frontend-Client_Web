@@ -1,3 +1,4 @@
+import 'package:districorp/models/usuarios_models.dart';
 import 'package:districorp/screen/Employee/widgets/album_page_empleado.dart';
 import 'package:districorp/screen/Employee/widgets/files_page_empleado.dart';
 import 'package:districorp/screen/Employee/widgets/home_page_empleado.dart';
@@ -61,6 +62,17 @@ class EmpDashboardProvider extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });
+  }
+
+
+  // Modelo para Usuarios
+  late Usuarios _selectedUser;
+
+  Usuarios get selectedUser => _selectedUser;
+
+  void updateSelectedUser(Usuarios user){
+    _selectedUser = user;
+    notifyListeners();
   }
 
   // Aseguramos que notifyListeners se ejecute después de la construcción del widget

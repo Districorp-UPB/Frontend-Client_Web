@@ -5,8 +5,8 @@ import 'package:districorp/screen/admin/Panel_principal_admin.dart';
 import 'package:flutter/material.dart';
 
 class MainPanelActualizarUserPage extends StatelessWidget {
-  final String email;
-  const MainPanelActualizarUserPage({super.key, required this.email});
+
+  const MainPanelActualizarUserPage({super.key, });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class MainPanelActualizarUserPage extends StatelessWidget {
               "Actualizar Usuarios",
               style: TextStyle(fontSize: cTitulosSize, fontWeight: FontWeight.bold),
             ),
-          UpdateUserPage(email: email,),
+          UpdateUserPage(),
         ],
       ),
       

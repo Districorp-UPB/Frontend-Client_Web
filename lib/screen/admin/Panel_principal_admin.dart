@@ -1,6 +1,6 @@
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
-import 'package:districorp/screen/admin/Panel_aceptar_usuarios.dart';
+import 'package:districorp/screen/admin/Panel_gestionar_empleados.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
 import 'package:districorp/screen/Login/login_screen.dart';
 import 'package:districorp/widgets/drawer_tile.dart';

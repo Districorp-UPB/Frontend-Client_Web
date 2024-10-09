@@ -5,7 +5,7 @@ import 'package:districorp/screen/Employee/Panel_files_empelado.dart';
 import 'package:districorp/screen/Employee/Panel_perfil_empleado.dart';
 import 'package:districorp/screen/Employee/Panel_streaming_empleado.dart';
 import 'package:districorp/screen/Employee/widgets/home_page_empleado.dart';
-import 'package:districorp/screen/admin/Panel_aceptar_usuarios.dart';
+import 'package:districorp/screen/admin/Panel_gestionar_empleados.dart';
 import 'package:districorp/screen/Login/login_screen.dart';
 import 'package:districorp/widgets/drawer_tile.dart';
 import 'package:districorp/widgets/gradient_appbar_total.dart';

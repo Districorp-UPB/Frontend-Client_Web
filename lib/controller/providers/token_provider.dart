@@ -6,13 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TokenProvider extends ChangeNotifier {
-  late String email;
-  late String name;
-  late String lastname;
-  late dynamic tokenw;
 
 
-  Future<String?> verificarTokenU({bool? rol}) async {
+  Future<String?> verificarTokenU() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? tokenActual = prefs.getString('token');
     // Verificar si el token está presente y está expirado
@@ -30,6 +26,13 @@ class TokenProvider extends ChangeNotifier {
       Get.to(() => const LoginScreen());
       throw Exception("No hay token");
     }
+  }
+
+    // Función para decodificar el token
+  Map<String, dynamic> decodeToken(String token) {
+    // Decodifica el token JWT y devuelve un mapa con los datos decodificados
+    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+    return decodedToken;
   }
 
   // Para cuando se inicializa la app y verificar el estado
@@ -52,6 +55,8 @@ class TokenProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', result);
   }
+
+
 
 
 

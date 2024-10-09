@@ -33,9 +33,22 @@ class UserItem extends StatelessWidget {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Text(email, style: const TextStyle(fontSize: 16)),
+            Row(
+              children: [
+                Icon(Icons.email, size: 18,),
+                const SizedBox(width: 8),
+                Text(email, style: const TextStyle(fontSize: 16)),
+              ],
+            ),
             const SizedBox(height: 8),
-            Text(phone, style: const TextStyle(fontSize: 16)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.phone, size: 18,),
+                const SizedBox(width: 8),
+                Text(phone, style: const TextStyle(fontSize: 16)),
+              ],
+            ),
             const SizedBox(height: 8),
             Spacer(),
             Row(

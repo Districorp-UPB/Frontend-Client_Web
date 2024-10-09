@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
 import 'package:districorp/controller/services/api.dart';
 import 'package:districorp/screen/admin/Panel_principal_admin.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
@@ -9,10 +10,11 @@ import 'package:districorp/widgets/custom_input.dart';
 import 'package:districorp/widgets/custom_button.dart';
 import 'package:districorp/widgets/gradient_appbar.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class UpdateUserPage extends StatefulWidget {
-  final String email;
-  UpdateUserPage({required this.email});
+
+  UpdateUserPage();
 
   @override
   State<UpdateUserPage> createState() => _UpdateUserPageState();
@@ -21,6 +23,7 @@ class UpdateUserPage extends StatefulWidget {
 class _UpdateUserPageState extends State<UpdateUserPage> {
  
 ApiController apiController = ApiController();
+
   // Inicializamos variables para el control de errores
   String emailError = '';
   String contraError = '';
@@ -56,6 +59,15 @@ ApiController apiController = ApiController();
 
   @override
   Widget build(BuildContext context) {
+    final employeeProvider = Provider.of<EmpDashboardProvider>(context);
+    // Inicialiamos las variables de los campos del usuario
+    apiController.nombreActualizarController.text = employeeProvider.selectedUser.nombre;
+    apiController.apellidolActualizarController.text = employeeProvider.selectedUser.apellido;
+    apiController.emailActualizarController.text = employeeProvider.selectedUser.email;
+    apiController.documentActualizarController.text = employeeProvider.selectedUser.documento;
+    apiController.phoneActualizarController.text = employeeProvider.selectedUser.telefono;
+    apiController.rolActualizarController.text = employeeProvider.selectedUser.rol;
+
     return 
        Padding(
         padding: const EdgeInsets.all(16.0),
@@ -91,7 +103,7 @@ ApiController apiController = ApiController();
             controller: apiController.documentActualizarController,
             errorText: documentError.isNotEmpty ? documentError : null,
             errorStyle: errorStyle,
-            enabled: true,
+            enabled: false,
           ),
           const SizedBox(height: 16),
           CustomInput(
@@ -109,7 +121,7 @@ ApiController apiController = ApiController();
             
             errorText: contraError.isNotEmpty ? contraError : null,
             errorStyle: errorStyle,
-            enabled: true,
+            enabled: false,
           ),
         
           const SizedBox(height: 24),

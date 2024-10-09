@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/controller/services/api.dart';
 import 'package:districorp/screen/admin/Panel_principal_admin.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:districorp/widgets/custom_input.dart';
 import 'package:districorp/widgets/custom_button.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class AddUserPage extends StatefulWidget {
   @override
@@ -51,6 +53,8 @@ class _AddUserPageState extends State<AddUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -150,7 +154,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       'Ingrese un apellido para el usuario';
                 }
                 if (apiController.phoneNewController.text.isEmpty) {
-                  errorsRegister['phoneError'] = 'Ingrese un telefono para el usuario';
+                  errorsRegister['phoneError'] =
+                      'Ingrese un telefono para el usuario';
                 }
                 if (apiController.documentNewController.text.isEmpty) {
                   errorsRegister['documentError'] =
@@ -158,7 +163,8 @@ class _AddUserPageState extends State<AddUserPage> {
                 }
 
                 if (apiController.rolNewController.text.isEmpty) {
-                  errorsRegister['tipoRolError'] = 'Ingrese un rol para el usuario';
+                  errorsRegister['tipoRolError'] =
+                      'Ingrese un rol para el usuario';
                 }
 
                 // Actualizar el estado una vez con los errores
@@ -174,17 +180,24 @@ class _AddUserPageState extends State<AddUserPage> {
                 print(errorsRegister.values);
                 // Si no hay errores, proceder con el login
                 if (errorsRegister.values.every((error) => error.isEmpty)) {
-                  print("123");
-                  int? result = await apiController.registrarUsuarioDistri();
-                  if (result == 200) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Usuario Registrado Existosamente!"),
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                    ));
+                  final token = await tokenProvider.verificarTokenU();
 
-                    Get.to(() => MainPanelPage(
-                                child: AdminUserManagementPage(tipoOu: 'User',)));
+                  if (token != null) {
+                    int? result = await apiController.registrarUsuarioDistri(token);
+                    if (result == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Usuario Registrado Existosamente!"),
+                        behavior: SnackBarBehavior.floating,
+                        showCloseIcon: true,
+                      ));
+
+                      Get.to(() => MainPanelPage(
+                              child: AdminUserManagementPage(
+                            tipoOu: 'User',
+                          )));
+                    
+                  }
+                     
                   }
                 }
               } catch (e) {
