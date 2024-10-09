@@ -31,10 +31,10 @@ class EmpDashboardProvider extends ChangeNotifier {
 
   // Método para actualizar el índice desde la URL
   void updateIndexFromUrl(String path) {
-    if (path.contains('/MainPanelPage')) {
+    if (path.contains('/MainPanelUserPage')) {
       _selectedUserManagement = 0; // Gestión de Usuarios
      
-    } else if (path.contains('/MainPanelAcceptUserPage')) {
+    } else if (path.contains('/MainPanelEmployeePage')) {
       _selectedUserManagement = 1; // Aceptar Usuarios
       
     } else if (path.contains('/MainPanelAddUserPage')) {
