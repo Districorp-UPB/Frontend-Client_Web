@@ -1,3 +1,5 @@
+import 'dart:async'; // Para el Timer
+
 import 'package:districorp/constant/images.dart';
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
@@ -9,9 +11,7 @@ import 'package:districorp/screen/admin/Panel_actualizar_usuarios.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:districorp/widgets/UserItem_caja.dart';
 import 'package:districorp/widgets/custom__button_image.dart';
-import 'package:districorp/screen/admin/widgets/update_user.dart';
 import 'package:flutter/material.dart';
-import 'package:districorp/widgets/custom_button.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -21,62 +21,79 @@ class AdminUserManagementPage extends StatefulWidget {
   const AdminUserManagementPage({super.key, required this.tipoOu});
 
   @override
-  _AdminUserManagementPageState createState() =>
-      _AdminUserManagementPageState();
+  _AdminUserManagementPageState createState() => _AdminUserManagementPageState();
 }
 
 class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
   ApiController apiController = ApiController();
   final TextEditingController searchController = TextEditingController();
-  List<Map<String, dynamic>> users = [];
-  List<Map<String, dynamic>> filteredUsers = [];
+  List<Usuarios> users = [];
+  List<Usuarios> filteredUsers = [];
+  final ScrollController _scrollController = ScrollController();
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     // Cargar los usuarios desde la API al iniciar
     fetchUsers();
+
+    // Configurar el polling cada 2 minutos
+    _timer = Timer.periodic(Duration(minutes: 2), (timer) {
+      fetchUsers();
+    });
+
+    // Escuchar el desplazamiento del scroll para actualizar al subir
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        if (_scrollController.position.pixels == 0) {
+          // El scroll está en la parte superior, recargar datos
+          fetchUsers();
+        }
+      }
+    });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _timer.cancel(); // Cancelar el polling cuando se destruya el widget
+    super.dispose();
+  }
+
+  // Mapeo de roles
+  Map<String, String> rolesMap = {
+    "Employee": "Empleados",
+    "User": "Usuarios",
+  };
+
   // Función para obtener usuarios desde la API
-
-     Map<String, String> rolesMap = {
-        "Employee": "Empleados",
-        "User": "Usuarios",
-    };
-
-
   Future<void> fetchUsers() async {
     try {
-      // Accedemos al TokenProvider para obtener el token
       final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
-      final token = await tokenProvider.verificarTokenU(); // Obtener el token usando el Provider
+      final token = await tokenProvider.verificarTokenU();
       if (token != null) {
         var response = await apiController.obtenerUsuariosDistri(widget.tipoOu, token);
         var jsonResponse = response['users'] as List;
-        List<Map<String, dynamic>> fetchedUsers = jsonResponse.map((user) {
-          return {
-            'name': user['name'] + " " + user['surname'],
-            'email': user['email'],
-            'phone': user['phone'],
-          };
+
+        List<Usuarios> fetchedUsers = jsonResponse.map((userJson) {
+          return Usuarios.fromJson(userJson);
         }).toList();
 
         setState(() {
           users = fetchedUsers;
-          filteredUsers = fetchedUsers; // Inicialmente mostrar todos los usuarios
+          filteredUsers = fetchedUsers;
         });
-        
       }
-
     } catch (e) {
       print("Error al obtener usuarios: $e");
     }
   }
 
+  // Función para filtrar los usuarios
   void filterUsers(String query) {
     final filtered = users.where((user) {
-      final emailLower = user['email']!.toLowerCase();
+      final emailLower = user.email.toLowerCase();
       final searchLower = query.toLowerCase();
       return emailLower.contains(searchLower);
     }).toList();
@@ -86,12 +103,35 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
     });
   }
 
+  void _deleteUser(Usuarios user, BuildContext context) async {
+    try {
+      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+      final token = await tokenProvider.verificarTokenU();
+
+      if (token != null) {
+        await apiController.eliminarUsuariosDistri(user.email, user.rol);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Usuario eliminado exitosamente!"),
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon: true,
+          ),
+        );
+
+        await fetchUsers(); // Refrescar la lista de usuarios
+      }
+    } catch (e) {
+      print("Error al eliminar usuario: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final employeeProvider = Provider.of<EmpDashboardProvider>(context);
     String? rolTipoConvertido = rolesMap[widget.tipoOu];
-    
+
     return Stack(
       children: [
         Column(
@@ -110,38 +150,39 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
             ),
             Expanded(
               child: filteredUsers.isNotEmpty
-                  ? GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: size.width > 1280 ? 3 : 2,
-                        childAspectRatio: size.width > 1680 ? 2.6 : 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
+                  ? RefreshIndicator(
+                      onRefresh: fetchUsers,
+                      child: GridView.builder(
+                        controller: _scrollController, // Vincular el ScrollController
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: size.width > 1280 ? 3 : 2,
+                          childAspectRatio: size.width > 1680 ? 2.6 : 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        itemCount: filteredUsers.length,
+                        itemBuilder: (context, index) {
+                          return UserItem(
+                            name: filteredUsers[index].nombre + " " + filteredUsers[index].apellido,
+                            email: filteredUsers[index].email,
+                            phone: filteredUsers[index].telefono,
+                            onUpdate: () {
+                              employeeProvider.updateSelectedUserManagement(3);
+                              Usuarios user = filteredUsers[index];
+                              employeeProvider.updateSelectedUser(user);
+                              Get.to(() => MainPanelActualizarUserPage());
+                            },
+                            onDelete: () async {
+                              Usuarios user = filteredUsers[index];
+                              employeeProvider.updateSelectedUser(user);
+                              _deleteUser(employeeProvider.selectedUser, context);
+                            },
+                          );
+                        },
                       ),
-                      padding: const EdgeInsets.all(16.0),
-                      itemCount: filteredUsers.length,
-                      itemBuilder: (context, index) {
-                        return UserItem(
-                          name: filteredUsers[index]['name']!,
-                          email: filteredUsers[index]['email']!,
-                          phone: filteredUsers[index]['phone']!,
-                          onUpdate: () {
-                            employeeProvider.updateSelectedUserManagement(3);
-                            
-                            // Convertir el Map en una instancia de Usuarios
-                            Usuarios user = Usuarios.fromJson(filteredUsers[index]);
-
-                            employeeProvider.updateSelectedUser(user);
-                            Get.to(() => MainPanelActualizarUserPage(
-                                  
-                                ));
-                          },
-                          onDelete: () {
-                            // Implementar la función para eliminar usuarios
-                          },
-                        );
-                      },
                     )
-                  : Center(child: CircularProgressIndicator()), // Indicador de carga mientras se obtienen los usuarios
+                  : Center(child: CircularProgressIndicator()),
             ),
           ],
         ),

@@ -12,7 +12,10 @@ const actualizarUserUrl = "$iPv4/api/edit";
 //Urls de obtener usuarios
 const obtenerUserUrl = "$iPv4/api/list";
 
-const registrationUrl = "http://$iPv4:80/api/users/newUser";
+//Urls de delete usuarios
+const eliminarUserUrl = "$iPv4/api/delete";
+
+
 
 
 

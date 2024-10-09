@@ -201,14 +201,7 @@ class ApiController {
   
   Future<int?> actualizarUsuarioDistri() async {
     try {
-      
-      Map<String, String> rolesMap = {
-        "Administrador": "Admin",
-        "Empleado": "Employee",
-        "Usuario": "User",
-      };
-
-      String? rolTipoConvertido = rolesMap[rolActualizarController.text];
+    
 
       Map<String, dynamic> regBodyActivo = {
         "name": nombreActualizarController.text,
@@ -216,7 +209,7 @@ class ApiController {
         "email": emailActualizarController.text,
         "phone": phoneActualizarController.text,
         "document": documentActualizarController.text,
-        "ou": rolTipoConvertido,
+        "ou": rolActualizarController.text,
 
       };
 
@@ -282,6 +275,40 @@ class ApiController {
       print("Error al realizar la peticion: $e");
     }
     return {};
+  }
+
+  Future<int?> eliminarUsuariosDistri(String email, String rol) async {
+    try {
+      
+ 
+      Map<String, dynamic> regBody = {
+        "email": email,
+        "ou": rol,
+      };
+
+      var response = await http.post(
+        Uri.parse("$eliminarUserUrl/"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(regBody)
+      );
+
+      var jsonRegisterResponse = jsonDecode(response.body);
+
+      print(
+          "este es el response $jsonRegisterResponse y el codigo ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        print("Usuario Eliminado");
+        return jsonRegisterResponse;
+      } else {
+        throw Exception("Error desconocido al obtener usuarios.");
+      }
+    } catch (e) {
+      print("Error al realizar la peticion: $e");
+    }
+    return null;
   }
 
 

@@ -24,9 +24,9 @@ class Usuarios {
       nombre: json['name'] ?? "Sin nombre",
       apellido: json['surname'] ?? "Sin apellido",
       email: json['email'] ?? "Sin correo electronico",
-      rol: json['email'] ?? "Sin correo electronico",
+      rol: json['role'] ?? "Sin rol",
       telefono: json['phone'] ?? "Sin telefono",
-      documento: json['email'] ?? "Sin correo",
+      documento: json['document'] ?? "Sin documento",
 
     );
   }
