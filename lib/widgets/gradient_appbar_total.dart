@@ -1,13 +1,13 @@
 import 'package:districorp/constant/images.dart';
 import 'package:flutter/material.dart';
 
-class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
+class GradientAppBarTotal extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Color titleColor;
   final List<Widget>? actions; // Add the actions parameter
   final bool implyLeading;
 
-  const GradientAppBar({
+  const GradientAppBarTotal({
     super.key, 
     this.title,
     this.titleColor = Colors.white,
@@ -20,31 +20,34 @@ class GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
     final size = MediaQuery.of(context).size;
     return AppBar(
       automaticallyImplyLeading: implyLeading,
+      
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             cLogoLateral,
-            height: size.height * 0.065
+            height: 62.595 //size.height * 0.065
           ),
-          title != null ? Text(
-            title!,
-            style: TextStyle(color: titleColor),
+          title != null ? GestureDetector(
+            onTap: (){
+              print(size.height);
+            },
+            child: Text(
+              title!,
+              style: TextStyle(color: titleColor, fontSize: 21),
+            ),
           ) :
           Text("")
         ],
       ),
 
       actions: actions, // Use the actions in the AppBar
+
       iconTheme: IconThemeData(color: titleColor),
       flexibleSpace: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color.fromRGBO(235, 2, 56, 1), Color.fromRGBO(120, 50, 220, 1)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Color.fromRGBO(235, 2, 56, 1)
         ),
       ),
     );

@@ -34,6 +34,7 @@ class SearchBarCustom extends StatelessWidget {
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
+                    
                     children: [
                       Expanded(
                         child: TextField(

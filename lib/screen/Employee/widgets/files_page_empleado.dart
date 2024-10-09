@@ -1,39 +1,40 @@
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/widgets/Employee_widgets/album_card.dart';
+import 'package:districorp/widgets/Employee_widgets/file_card.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:flutter/material.dart';
 
-class EmployeeAlbum extends StatefulWidget {
-  const EmployeeAlbum({super.key});
+class EmployeeFiles extends StatefulWidget {
+  const EmployeeFiles({super.key});
 
   @override
-  _EmployeeAlbumState createState() => _EmployeeAlbumState();
+  _EmployeeFilesState createState() => _EmployeeFilesState();
 }
 
-class _EmployeeAlbumState extends State<EmployeeAlbum> {
+class _EmployeeFilesState extends State<EmployeeFiles> {
   final TextEditingController searchController = TextEditingController();
-  final List<Map<String, String>> streamingAlbums = [
-    {"title": "Resting Forest", "image": "assets/nature1.jpg"},
-    {"title": "Shining Stars", "image": "assets/nature2.jpg"},
-    {"title": "Pearl City", "image": "assets/nature3.jpg"},
+  final List<Map<String, String>> sharedFiles = [
+    {"title": "Reporte Ambiental", "image": "assets/texto1.txt"},
+    {"title": "Infografia Etica Moral", "image": "assets/text2.txt"},
+    {"title": "Documento Parcial 3", "image": "assets/texto3.txt"},
   ];
-  List<Map<String, String>> filteredAlbums = [];
+  List<Map<String, String>> filteredFiles = [];
 
   @override
   void initState() {
     super.initState();
-    filteredAlbums = streamingAlbums; // Inicialmente mostrar todos los albunes
+    filteredFiles = sharedFiles; // Inicialmente mostrar todos los albunes
   }
 
-  void filterAlbum(String query) {
-    final filtered = streamingAlbums.where((video) {
+  void filterFiles(String query) {
+    final filtered = sharedFiles.where((video) {
       final titleLower = video['title']!.toLowerCase();
       final searchLower = query.toLowerCase();
       return titleLower.contains(searchLower);
     }).toList();
 
     setState(() {
-      filteredAlbums = filtered;
+      filteredFiles = filtered;
     });
   }
 
@@ -45,27 +46,37 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
             padding: const EdgeInsets.all(16),
             child: SearchBarCustom(
                 controller: searchController,
-                onChanged: filterAlbum,
-                hintext: "Buscar videos...")),
+                onChanged: filterFiles,
+                hintext: "Buscar archivos...")),
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(16),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 columnas por fila
-                crossAxisSpacing: 16, // Espacio horizontal entre tarjetas
-                mainAxisSpacing: 16, // Espacio vertical entre tarjetas
-                childAspectRatio: 0.75, // Relación de aspecto
-              ),
-              itemCount: filteredAlbums.length,
-              itemBuilder: (context, index) {
-                final video = filteredAlbums[index];
-                return AlbumCard(
-                  title: video['title']!,
-                  imageUrl: video['image']!,
-                );
-              },
-            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              final crossAxisCount = constraints.maxWidth > 1200
+                  ? 4
+                  : constraints.maxWidth > 800
+                      ? 3
+                      : constraints.maxWidth > 600
+                          ? 2
+                          : 1;
+
+              return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount, // 2 columnas por fila
+                  crossAxisSpacing: 140, // Espacio horizontal entre tarjetas
+                  mainAxisSpacing: 70, // Espacio vertical entre tarjetas
+                  childAspectRatio: 1, // Relación de aspecto
+                ),
+                itemCount: filteredFiles.length,
+                itemBuilder: (context, index) {
+                  final video = filteredFiles[index];
+                  return FileCard(
+                    title: video['title']!,
+                    fileUrl: video['image']!,
+                  );
+                },
+              );
+            }),
           ),
         ),
         Column(
@@ -89,7 +100,7 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
                       // Acción del botón de play
                     },
                     icon: Icon(
-                      Icons.add_photo_alternate_sharp,
+                      Icons.upload_file_sharp,
                       color: Colors.white,
                       size: 35,
                     ),
@@ -107,7 +118,7 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
                     ).createShader(bounds);
                   },
                   child: Text(
-                    "Subir Album",
+                    "Subir Archivo",
                     style: TextStyle(
                       color: Colors
                           .white, // Esto es necesario aunque será cubierto por el shader

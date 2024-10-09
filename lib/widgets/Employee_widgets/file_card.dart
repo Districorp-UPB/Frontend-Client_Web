@@ -25,7 +25,7 @@ class FileCard extends StatelessWidget {
             child: isImage(fileUrl)
                 ? Image.asset(
                     fileUrl,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     width: double.infinity,
                     height: double.infinity,
                   )
@@ -55,7 +55,7 @@ class FileCard extends StatelessWidget {
                 children: [
                   // El `Expanded` permitirá que el texto ocupe el 85% del espacio disponible
                   Expanded(
-                    flex: 80,
+                    flex: 87,
                     child: Text(
                       title,
                       style: const TextStyle(
@@ -68,7 +68,7 @@ class FileCard extends StatelessWidget {
                   ),
                   // Espacio para el `PopupMenuButton`, ocupará el 15%
                   Flexible(
-                    flex: 20,
+                    flex: 13,
                     child: PopupMenuButton<String>(
                       onSelected: (value) {
                         print("Opción seleccionada: $value");

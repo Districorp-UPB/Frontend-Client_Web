@@ -14,6 +14,18 @@ class _EmployeeStreamingState extends State<EmployeeStreaming> {
   final TextEditingController searchController = TextEditingController();
   final List<Map<String, String>> streamingVideos = [
     {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
+    {"title": "Venom 3", "image": "assets/video1.png"},
     {"title": "Joker 2", "image": "assets/video2.png"},
     {"title": "Gladiator 2", "image": "assets/video3.png"},
   ];
@@ -39,6 +51,7 @@ class _EmployeeStreamingState extends State<EmployeeStreaming> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       children: [
         Padding(
@@ -50,21 +63,33 @@ class _EmployeeStreamingState extends State<EmployeeStreaming> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(16),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 columnas por fila
-                crossAxisSpacing: 16, // Espacio horizontal entre tarjetas
-                mainAxisSpacing: 16, // Espacio vertical entre tarjetas
-                childAspectRatio: 0.75, // Relación de aspecto
-              ),
-              itemCount: filteredVideos.length,
-              itemBuilder: (context, index) {
-                final video = filteredVideos[index];
-                return VideoCard(
-                  title: video['title']!,
-                  imageUrl: video['image']!,
-                );
-              },
+            child: LayoutBuilder(
+              builder: (context, constraints){
+                final crossAxisCount = constraints.maxWidth > 1200
+                  ? 4
+                  : constraints.maxWidth > 800
+                      ? 3
+                      : constraints.maxWidth > 600
+                          ? 2
+                          : 1;
+              
+              return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount, // 2 columnas por fila
+                  crossAxisSpacing: 140, // Espacio horizontal entre tarjetas
+                  mainAxisSpacing: 70, // Espacio vertical entre tarjetas
+                  childAspectRatio: 1, // Relación de aspecto
+                ),
+                itemCount: filteredVideos.length,
+                itemBuilder: (context, index) {
+                  final video = filteredVideos[index];
+                  return VideoCard(
+                    title: video['title']!,
+                    imageUrl: video['image']!,
+                  );
+                },
+              );
+              }
             ),
           ),
         ),
