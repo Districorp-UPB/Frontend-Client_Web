@@ -1,5 +1,6 @@
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
+import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/screen/admin/Panel_gestionar_empleados.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
 import 'package:districorp/screen/Login/login_screen.dart';
@@ -38,6 +39,7 @@ class _MainPanelPageState extends State<MainPanelPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final employeeProvider = Provider.of<EmpDashboardProvider>(context);
+    final tokenProvider = Provider.of<TokenProvider>(context);
 
     return Scaffold(
       appBar: GradientAppBarTotal(
@@ -95,8 +97,8 @@ class _MainPanelPageState extends State<MainPanelPage> {
                           },
                           selected: employeeProvider.selectedUserManagement ==
                                   0 ||
-                              employeeProvider.selectedUserManagement == 2 ||
-                              employeeProvider.selectedUserManagement == 3,
+                              employeeProvider.selectedUserManagement == 2,
+                              
                           color: Colors.amber,
                         ),
                         DrawerTile(
@@ -132,8 +134,8 @@ class _MainPanelPageState extends State<MainPanelPage> {
                       },
                       child: GestureDetector(
                         onTap: () {
-                          print('Logout');
-                          Get.to(() => const LoginScreen());
+                          tokenProvider.eliminarTokenU();
+                          
                         },
                         child: AnimatedContainer(
                           duration: Duration(
@@ -156,6 +158,7 @@ class _MainPanelPageState extends State<MainPanelPage> {
                                             8), // Espaciado entre el icono y el texto
                                     Text(
                                       "Log Out",
+                                      
                                       style: TextStyle(
                                         fontSize: 18.5,
                                         color: _isHovered

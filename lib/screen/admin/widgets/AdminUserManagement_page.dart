@@ -11,6 +11,7 @@ import 'package:districorp/screen/admin/Panel_actualizar_usuarios.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:districorp/widgets/UserItem_caja.dart';
 import 'package:districorp/widgets/custom__button_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -94,8 +95,9 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
   void filterUsers(String query) {
     final filtered = users.where((user) {
       final emailLower = user.email.toLowerCase();
+      final nameLower = (user.nombre + " " + user.apellido).toLowerCase();
       final searchLower = query.toLowerCase();
-      return emailLower.contains(searchLower);
+      return emailLower.contains(searchLower) || nameLower.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -145,7 +147,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
               child: SearchBarCustom(
                 controller: searchController,
                 onChanged: filterUsers,
-                hintext: 'Buscar usuarios...',
+                hintext: 'Buscar ${rolTipoConvertido!.toLowerCase()}...',
               ),
             ),
             Expanded(
@@ -154,6 +156,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                       onRefresh: fetchUsers,
                       child: GridView.builder(
                         controller: _scrollController, // Vincular el ScrollController
+                        physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: size.width > 1280 ? 3 : 2,
                           childAspectRatio: size.width > 1680 ? 2.6 : 2,
@@ -182,7 +185,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                         },
                       ),
                     )
-                  : Center(child: CircularProgressIndicator()),
+                  : Center(child: CupertinoActivityIndicator()),
             ),
           ],
         ),

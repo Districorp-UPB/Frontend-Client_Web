@@ -34,43 +34,35 @@ class EmpDashboardProvider extends ChangeNotifier {
   void updateIndexFromUrl(String path) {
     if (path.contains('/MainPanelUserPage')) {
       _selectedUserManagement = 0; // Gestión de Usuarios
-     
     } else if (path.contains('/MainPanelEmployeePage')) {
       _selectedUserManagement = 1; // Aceptar Usuarios
-      
     } else if (path.contains('/MainPanelAddUserPage')) {
       _selectedUserManagement = 2; // Agregar Usuarios
     } else if (path.contains('/MainPanelActualizarUserPage')) {
       _selectedUserManagement = 3; // Actualizar Usuarios
-    } 
-    else if (path.contains('/EmployeePanelPage')) {
+    } else if (path.contains('/EmployeePanelPage')) {
       _selectedIndex = 0; // Panel Empleado
-    } 
-    else if (path.contains('/EmployeeProfilePanelPage')) {
+    } else if (path.contains('/EmployeeProfilePanelPage')) {
       _selectedIndex = 1; // Actualizar Perfil
-    } 
-    else if (path.contains('/EmployeeStreamingPanelPage')) {
+    } else if (path.contains('/EmployeeStreamingPanelPage')) {
       _selectedIndex = 2; // Gestionar Streaming
-    } 
-    else if (path.contains('/EmployeeAlbumPanelPage')) {
+    } else if (path.contains('/EmployeeAlbumPanelPage')) {
       _selectedIndex = 3; // Gestionar Album
-    } 
-    else if (path.contains('/EmployeeFilesPanelPage')) {
+    } else if (path.contains('/EmployeeFilesPanelPage')) {
       _selectedIndex = 4; // Gestionar Files
-    } 
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });
   }
 
-
   // Modelo para Usuarios
   late Usuarios _selectedUser;
 
   Usuarios get selectedUser => _selectedUser;
 
-  void updateSelectedUser(Usuarios user){
+  void updateSelectedUser(Usuarios user) {
     _selectedUser = user;
     notifyListeners();
   }
@@ -80,7 +72,9 @@ class EmpDashboardProvider extends ChangeNotifier {
   Widget getSelectedUserPage() {
     switch (_selectedUserManagement) {
       case 0:
-        return AdminUserManagementPage(tipoOu: 'User',);
+        return AdminUserManagementPage(
+          tipoOu: 'User',
+        );
       case 1:
         return EmployeeHome();
       case 2:
