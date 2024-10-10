@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:districorp/controller/services/api_config.dart';
 import 'package:districorp/models/archivo_models.dart';
 import 'package:districorp/models/imagenes_models.dart';
+import 'package:districorp/models/video_models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -537,7 +538,7 @@ Future<List<Imagen>> obtenerImagenesEmpleadoDistri(String token) async {
 
       return images; // Retorna la lista de imágenes
     } else {
-      throw Exception("Error desconocido al obtener datos personales.");
+      throw Exception("Error desconocido al obtener imagenes.");
     }
   } catch (e) {
     print("Error al realizar la petición: $e");
@@ -558,7 +559,28 @@ Future<List<Archivo>> obtenerArchivosEmpleadoDistri(String token) async {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Archivo.fromJson(data)).toList();
     } else {
-      throw Exception("Error desconocido al obtener datos personales.");
+      throw Exception("Error desconocido al obtener archivos.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return [];
+}
+
+Future<List<Video>> obtenerVideosEmpleadoDistri(String token) async {
+  try {
+    var response = await http.get(
+      Uri.parse("$obtenerVideosUrl/$token"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+   if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Video.fromJson(data)).toList();
+    } else {
+      throw Exception("Error desconocido al obtener videos.");
     }
   } catch (e) {
     print("Error al realizar la petición: $e");

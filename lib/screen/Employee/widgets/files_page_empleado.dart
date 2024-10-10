@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/token_provider.dart';// Asegúrate de tener un modelo adecuado para archivos
 import 'package:districorp/models/archivo_models.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_archivo.dart';
+import 'package:districorp/screen/Employee/widgets/add_streaming_empleado.dart';
 import 'package:districorp/widgets/Employee_widgets/file_card.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +122,53 @@ class _EmployeeFilesState extends State<EmployeeFiles> {
               );
             },
           ),
+        ),
+         Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(235, 2, 56, 1),
+                    Color.fromRGBO(120, 50, 220, 1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Get.to(() => EmployeeAddFilePanelPage());
+                },
+                icon: Icon(
+                  Icons.upload_file_sharp,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
+            ),
+            ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  colors: [
+                    Color.fromRGBO(235, 2, 56, 1),
+                    Color.fromRGBO(120, 50, 220, 1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds);
+              },
+              child: Text(
+                "Subir Archivo",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: cSubcontenidoSize,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
