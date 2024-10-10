@@ -13,3 +13,7 @@ const String cEditProfile = 'images/profile.png';
 
 //Imagenes para apartado de servicio del empleado
 const String cAddALbum = 'images/add_album.svg';
+const String cAddFile = 'images/add_file.svg';
+const String cAddStreaming = 'images/add_video.svg';
+const String cDefaultImage = 'images/default_image.svg';
+const String cDefaultStreaming = 'images/default_video.svg';

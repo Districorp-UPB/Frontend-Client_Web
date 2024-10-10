@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:typed_data'; // Importa para trabajar con Uint8List
 import 'package:districorp/constant/images.dart';
 import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/controller/services/api.dart';
@@ -10,32 +10,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class AddAlbumEmpleado extends StatefulWidget {
-  const AddAlbumEmpleado({super.key});
+class AddFileEmpleado extends StatefulWidget {
+  const AddFileEmpleado({super.key});
 
   @override
-  State<AddAlbumEmpleado> createState() => _AddAlbumEmpleadoState();
+  State<AddFileEmpleado> createState() => _AddFileEmpleadoState();
 }
 
-class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
+class _AddFileEmpleadoState extends State<AddFileEmpleado> {
   ApiController apiController = ApiController();
-  Uint8List? _imgBytes;
+  Uint8List? _fileBytes; // Cambiamos a Uint8List para almacenar los bytes
   String? _fileName;
 
   void takeSnapshot() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null && result.files.single.bytes != null) {
+    if (result != null && result.files.isNotEmpty) {
       setState(() {
-        _imgBytes = result.files.single.bytes;
+        _fileName = result.files.single.name; // Guarda el nombre del archivo
+        _fileBytes = result.files.single.bytes; // Obtiene los bytes del archivo
       });
-      // Guarda el nombre del archivo
-      String fileName = result.files.single.name;
-      // Asegúrate de que `fileName` esté disponible en tu contexto.
-      // Puedes guardarlo en una variable de estado si es necesario.
-      _fileName =
-          fileName; // Suponiendo que creaste una variable para guardar el nombre.
     } else {
-      print("No se seleccionó ningún archivo o los bytes son nulos.");
+      print("No se seleccionó ningún archivo.");
     }
   }
 
@@ -64,7 +59,7 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                   ).createShader(bounds);
                 },
                 child: const Text(
-                  'Agregar una Foto',
+                  'Agregar un Archivo',
                   style: TextStyle(
                     fontSize: 26,
                     color: Color.fromARGB(255, 194, 51, 51),
@@ -84,27 +79,18 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                       maxWidth: 700, // Limita el ancho máximo de la tarjeta
                     ),
                     child: Column(
-                      mainAxisSize: MainAxisSize
-                          .min, // Esto permite que el Card se ajuste al contenido
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.center,
                           alignment: WrapAlignment.center,
                           children: [
-                            _imgBytes == null
-                                ? const Text('No hay una imagen seleccionada.')
-                                : Container(
-                                    height: size.height * 0.4,
-                                    width: size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20)),
-                                      image: DecorationImage(
-                                        image: MemoryImage(_imgBytes!),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                            _fileBytes == null
+                                ? const Text('No hay un archivo seleccionado.')
+                                : SvgPicture.asset(
+                                    cDefaultImage,
+                                    height: size.height * 0.2,
+                                    width: size.width * 0.2,
                                   ),
                             const SizedBox(
                               width: 10,
@@ -125,7 +111,7 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                                   ).createShader(bounds);
                                 },
                                 child: const Icon(
-                                  Icons.image_search_sharp,
+                                  Icons.file_present_rounded,
                                   size: 25,
                                   color: Colors.white,
                                 ),
@@ -135,23 +121,26 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                         ),
                         const SizedBox(height: 20),
                         CustomButton(
-                          icon: Icons.add_photo_alternate_sharp,
+                          icon: Icons.upload_file_sharp,
                           text: 'Subir',
                           onPressed: () async {
                             final token = await tokenProvider.verificarTokenU();
-                            if (token != null && _imgBytes != null) {
+                            if (token != null && _fileBytes != null) {
                               // Usa el nombre del archivo obtenido del FilePicker
-                              String fileName = _fileName ??
-                                  'foto_por_defecto.jpg'; // Nombre por defecto si no hay archivo
+                              String fileName =
+                                  _fileName ?? 'archivo_por_defecto.file';
 
-                              int? result =
-                                  await apiController.subirFotoEmpleadoDistri(
-                                      token, _imgBytes!, fileName);
+                              // Llama al método para subir el archivo
+                              int? result = await apiController
+                                  .subirArchivoEmpleadoDistri(
+                                      token,
+                                      _fileBytes!,
+                                      fileName); // Se usa _fileBytes que ya es de tipo Uint8List
 
                               if (result == 200) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
-                                  content: Text("Foto subida exitosamente!"),
+                                  content: Text("Archivo subido exitosamente!"),
                                   behavior: SnackBarBehavior.floating,
                                   showCloseIcon: true,
                                 ));
@@ -169,7 +158,7 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
             ],
           ),
           SvgPicture.asset(
-            cAddALbum,
+            cAddFile,
             height: size.height * 0.3,
           ),
         ],
@@ -177,5 +166,3 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
     );
   }
 }
-
-

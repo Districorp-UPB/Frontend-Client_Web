@@ -1,7 +1,9 @@
 import 'package:districorp/constant/sizes.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_streaming.dart';
 import 'package:districorp/widgets/Employee_widgets/video_card.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EmployeeStreaming extends StatefulWidget {
   const EmployeeStreaming({super.key});
@@ -111,7 +113,7 @@ class _EmployeeStreamingState extends State<EmployeeStreaming> {
                   ),
                   child: IconButton(
                     onPressed: () {
-                      // Acción del botón de play
+                      Get.to(() => EmployeeAddStreamingPanelPage());
                     },
                     icon: Icon(
                       Icons.arrow_circle_down_outlined,

@@ -14,5 +14,10 @@ const actualizarProfileUrl = "$iPv4/api/editme";
 const obtenerUserUrl = "$iPv4/api/list";
 const obtenerDatosPersonalesUrl = "$iPv4/api/usuario";
 
+//Urls de subir
+const subirFotoUrl = "$iPv4/api/fileserver/grpc/upload/imagen";
+const subirVideoUrl = "$iPv4/api/fileserver/grpc/upload/video";
+const subirArchivoUrl = "$iPv4/api/fileserver/grpc/upload/archivo";
+
 //Urls de delete usuarios
 const eliminarUserUrl = "$iPv4/api/delete";

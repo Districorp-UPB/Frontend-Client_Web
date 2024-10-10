@@ -53,6 +53,8 @@ class EmpDashboardProvider extends ChangeNotifier {
       _selectedIndex = 3; // Gestionar Album
     } else if (path.contains('/EmployeeFilesPanelPage')) {
       _selectedIndex = 4; // Gestionar Files
+    } else if (path.contains('/EmployeeAddFilePanelPage')) {
+      _selectedIndex = 4; // Gestionar Files
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

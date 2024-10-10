@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:districorp/controller/services/api_config.dart';
 import 'package:flutter/material.dart';
@@ -407,6 +409,111 @@ class ApiController {
     }
     return null;
   }
+
+Future<int?> subirFotoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
+  try {
+    
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("$subirFotoUrl/$token"),
+    );
+
+    // Adjunta la imagen al request como un archivo de 'form-data'
+    request.files.add(http.MultipartFile.fromBytes(
+      'image', 
+      fileBytes,
+      filename: fileName, 
+    ));
+
+    
+    var response = await request.send();
+    var responseData = await http.Response.fromStream(response);
+
+    var jsonRegisterResponse = jsonDecode(responseData.body);
+
+    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("Foto subida exitosamente");
+      return 200;
+    } else {
+      throw Exception("Error desconocido al subir foto.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return null;
+}
+
+Future<int?> subirVideoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
+  try {
+    
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("$subirVideoUrl/$token"),
+    );
+
+    // Adjunta la imagen al request como un archivo de 'form-data'
+    request.files.add(http.MultipartFile.fromBytes(
+      'video', 
+      fileBytes,
+      filename: fileName, 
+    ));
+
+    
+    var response = await request.send();
+    var responseData = await http.Response.fromStream(response);
+
+    var jsonRegisterResponse = jsonDecode(responseData.body);
+
+    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("Video subida exitosamente");
+      return 200;
+    } else {
+      throw Exception("Error desconocido al subir video.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return null;
+}
+
+Future<int?> subirArchivoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
+  try {
+    
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("$subirArchivoUrl/$token"),
+    );
+
+    // Adjunta la imagen al request como un archivo de 'form-data'
+    request.files.add(http.MultipartFile.fromBytes(
+      'file', 
+      fileBytes,
+      filename: fileName, 
+    ));
+
+    
+    var response = await request.send();
+    var responseData = await http.Response.fromStream(response);
+
+    var jsonRegisterResponse = jsonDecode(responseData.body);
+
+    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print("Archivo subido exitosamente");
+      return 200;
+    } else {
+      throw Exception("Error desconocido al subir archivo.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return null;
+}
 
 
 

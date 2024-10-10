@@ -2,6 +2,8 @@ import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
 import 'package:districorp/controller/providers/navigator_observer.dart';
 import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/screen/Employee/Panel_agregar_album.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_archivo.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_streaming.dart';
 import 'package:districorp/screen/Employee/Panel_album_empleado.dart';
 import 'package:districorp/screen/Employee/Panel_files_empelado.dart';
 import 'package:districorp/screen/Employee/Panel_perfil_empleado.dart';
@@ -18,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 
 void main() async {
   // Garantiza que los widgets estén inicializados antes de ejecutar la aplicación.
@@ -31,7 +34,15 @@ void main() async {
 
   // LLamar el metodo de getRolU() y saber si el token si existe que rol pertenece
   String? rol = await tokenProvider.getRolU(token);
- 
+
+   VideoPlayerMediaKit.ensureInitialized(
+    macOS: true,
+    windows: true,
+    linux: true,
+    android: true,
+    web: true
+  );
+
   setUrlStrategy(PathUrlStrategy());
   runApp(MyApp(
     rol: rol,
@@ -78,13 +89,14 @@ class MyApp extends StatelessWidget {
             '/LoginScreen': (context) => const LoginScreen(),
 
             '/MainPanelPage': (context) => MainPanelPage(
-                  child: AdminUserManagementPage(tipoOu: 'User',),
+                  child: AdminUserManagementPage(
+                    tipoOu: 'User',
+                  ),
                 ),
-            '/MainPanelAdminEmployeePage': (context) => MainPanelAdminEmployeePage(),
+            '/MainPanelAdminEmployeePage': (context) =>
+                MainPanelAdminEmployeePage(),
             '/MainPanelActualizarUserPage': (context) =>
-                MainPanelActualizarUserPage(
-                
-                ),
+                MainPanelActualizarUserPage(),
             '/MainPanelAddUserPage': (context) => MainPanelAddUserPage(),
 
             // Rutas para los empleados
@@ -97,7 +109,12 @@ class MyApp extends StatelessWidget {
                 EmployeeProfilePanelPage(),
             '/EmployeeFilesPanelPage': (context) => EmployeeFilesPanelPage(),
             '/EmployeeAlbumPanelPage': (context) => EmployeeAlbumPanelPage(),
-            '/EmployeeAddAlbumPanelPage': (context) => EmployeeAddAlbumPanelPage(),
+            '/EmployeeAddAlbumPanelPage': (context) =>
+                EmployeeAddAlbumPanelPage(),
+            '/EmployeeAddFilePanelPage': (context) =>
+                EmployeeAddFilePanelPage(),
+            '/EmployeeAddStreamingPanelPage': (context) =>
+                EmployeeAddStreamingPanelPage(),
           },
         );
       }),
@@ -105,17 +122,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-  // Método para determinar la ruta inicial según el rol
-  String _getInitialRoute(String? rol) {
-    if (rol == null) {
-      return '/LoginScreen';
-    } else if (rol == 'Admin') {
-      return '/MainPanelPage';
-    } else if (rol == 'Employee') {
-      return '/EmployeePanelPage';
-    }
-    return '/LoginScreen'; // Por defecto
+// Método para determinar la ruta inicial según el rol
+String _getInitialRoute(String? rol) {
+  if (rol == null) {
+    return '/LoginScreen';
+  } else if (rol == 'Admin') {
+    return '/MainPanelPage';
+  } else if (rol == 'Employee') {
+    return '/EmployeePanelPage';
   }
+  return '/LoginScreen'; // Por defecto
+}
 
 class MyBehavior extends ScrollBehavior {
   @override

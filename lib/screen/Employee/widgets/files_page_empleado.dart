@@ -1,8 +1,10 @@
 import 'package:districorp/constant/sizes.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_archivo.dart';
 import 'package:districorp/widgets/Employee_widgets/album_card.dart';
 import 'package:districorp/widgets/Employee_widgets/file_card.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EmployeeFiles extends StatefulWidget {
   const EmployeeFiles({super.key});
@@ -97,7 +99,7 @@ class _EmployeeFilesState extends State<EmployeeFiles> {
                   ),
                   child: IconButton(
                     onPressed: () {
-                      // Acción del botón de play
+                      Get.to(() => EmployeeAddFilePanelPage());
                     },
                     icon: Icon(
                       Icons.upload_file_sharp,

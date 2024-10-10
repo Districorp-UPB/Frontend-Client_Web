@@ -10,14 +10,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class AddAlbumEmpleado extends StatefulWidget {
-  const AddAlbumEmpleado({super.key});
+class AddStreamingEmpleado extends StatefulWidget {
+  const AddStreamingEmpleado({super.key});
 
   @override
-  State<AddAlbumEmpleado> createState() => _AddAlbumEmpleadoState();
+  State<AddStreamingEmpleado> createState() => _AddStreamingEmpleadoState();
 }
 
-class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
+class _AddStreamingEmpleadoState extends State<AddStreamingEmpleado> {
   ApiController apiController = ApiController();
   Uint8List? _imgBytes;
   String? _fileName;
@@ -64,7 +64,7 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                   ).createShader(bounds);
                 },
                 child: const Text(
-                  'Agregar una Foto',
+                  'Agregar un Video',
                   style: TextStyle(
                     fontSize: 26,
                     color: Color.fromARGB(255, 194, 51, 51),
@@ -92,19 +92,11 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                           alignment: WrapAlignment.center,
                           children: [
                             _imgBytes == null
-                                ? const Text('No hay una imagen seleccionada.')
-                                : Container(
-                                    height: size.height * 0.4,
-                                    width: size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20)),
-                                      image: DecorationImage(
-                                        image: MemoryImage(_imgBytes!),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                ? const Text('No hay un video seleccionado.')
+                                : SvgPicture.asset(
+                                    cDefaultStreaming,
+                                    height: size.height * 0.2,
+                                    width: size.width * 0.2,
                                   ),
                             const SizedBox(
                               width: 10,
@@ -125,7 +117,7 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                                   ).createShader(bounds);
                                 },
                                 child: const Icon(
-                                  Icons.image_search_sharp,
+                                  Icons.video_file_sharp,
                                   size: 25,
                                   color: Colors.white,
                                 ),
@@ -135,23 +127,23 @@ class _AddAlbumEmpleadoState extends State<AddAlbumEmpleado> {
                         ),
                         const SizedBox(height: 20),
                         CustomButton(
-                          icon: Icons.add_photo_alternate_sharp,
+                          icon: Icons.arrow_circle_down_outlined,
                           text: 'Subir',
                           onPressed: () async {
                             final token = await tokenProvider.verificarTokenU();
                             if (token != null && _imgBytes != null) {
                               // Usa el nombre del archivo obtenido del FilePicker
                               String fileName = _fileName ??
-                                  'foto_por_defecto.jpg'; // Nombre por defecto si no hay archivo
+                                  'video_por_defecto.mp4'; // Nombre por defecto si no hay archivo
 
                               int? result =
-                                  await apiController.subirFotoEmpleadoDistri(
+                                  await apiController.subirVideoEmpleadoDistri(
                                       token, _imgBytes!, fileName);
 
                               if (result == 200) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
-                                  content: Text("Foto subida exitosamente!"),
+                                  content: Text("Video subido exitosamente!"),
                                   behavior: SnackBarBehavior.floating,
                                   showCloseIcon: true,
                                 ));
