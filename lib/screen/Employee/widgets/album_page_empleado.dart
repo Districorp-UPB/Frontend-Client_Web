@@ -1,7 +1,9 @@
 import 'package:districorp/constant/sizes.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_album.dart';
 import 'package:districorp/widgets/Employee_widgets/album_card.dart';
 import 'package:districorp/widgets/SearchBarCustom.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EmployeeAlbum extends StatefulWidget {
   const EmployeeAlbum({super.key});
@@ -50,16 +52,15 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(16),
-            child: LayoutBuilder(
-              builder: (context, constraints){
-                final crossAxisCount = constraints.maxWidth > 1200
+            child: LayoutBuilder(builder: (context, constraints) {
+              final crossAxisCount = constraints.maxWidth > 1200
                   ? 4
                   : constraints.maxWidth > 800
                       ? 3
                       : constraints.maxWidth > 600
                           ? 2
                           : 1;
-              
+
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount, // 2 columnas por fila
@@ -76,8 +77,7 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
                   );
                 },
               );
-              }
-            ),
+            }),
           ),
         ),
         Column(
@@ -98,7 +98,7 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
                   ),
                   child: IconButton(
                     onPressed: () {
-                      // Acción del botón de play
+                      Get.to(() => EmployeeAddAlbumPanelPage());
                     },
                     icon: Icon(
                       Icons.add_photo_alternate_sharp,

@@ -1,6 +1,7 @@
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
 import 'package:districorp/controller/providers/navigator_observer.dart';
 import 'package:districorp/controller/providers/token_provider.dart';
+import 'package:districorp/screen/Employee/Panel_agregar_album.dart';
 import 'package:districorp/screen/Employee/Panel_album_empleado.dart';
 import 'package:districorp/screen/Employee/Panel_files_empelado.dart';
 import 'package:districorp/screen/Employee/Panel_perfil_empleado.dart';
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
                 EmployeeProfilePanelPage(),
             '/EmployeeFilesPanelPage': (context) => EmployeeFilesPanelPage(),
             '/EmployeeAlbumPanelPage': (context) => EmployeeAlbumPanelPage(),
+            '/EmployeeAddAlbumPanelPage': (context) => EmployeeAddAlbumPanelPage(),
           },
         );
       }),

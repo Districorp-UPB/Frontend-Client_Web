@@ -108,12 +108,10 @@ class ApiController {
 
         return respuestaCompleta;
       } else if (responseLogin.statusCode == 400) {
-        handleLoginError(
-            responseLogin.statusCode, jsonResponseLog['error']);
+        handleLoginError(responseLogin.statusCode, jsonResponseLog['error']);
         throw Exception("Error 400");
       } else if (responseLogin.statusCode == 500) {
-        handleLoginError(
-            responseLogin.statusCode, jsonResponseLog['error']);
+        handleLoginError(responseLogin.statusCode, jsonResponseLog['error']);
         throw Exception("Error 500");
       } else {
         throw Exception("Error en la : ${responseLogin.statusCode}");
@@ -132,10 +130,9 @@ class ApiController {
   final TextEditingController documentNewController = TextEditingController();
   final TextEditingController passwordNewController = TextEditingController();
   final TextEditingController rolNewController = TextEditingController();
-  
+
   Future<int?> registrarUsuarioDistri(String token) async {
     try {
-      
       Map<String, String> rolesMap = {
         "Administrador": "Admin",
         "Empleado": "Employee",
@@ -174,14 +171,18 @@ class ApiController {
       if (response.statusCode == 200) {
         print("Usuario registrado");
         return 200;
-      } else if (response.statusCode == 400 && jsonRegisterResponse.containsKey('message')) {
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('message')) {
         handleRegistrationError(
             response.statusCode, jsonRegisterResponse['message']);
         throw Exception("Usuario ya existente.");
-      } else if (response.statusCode == 400 && jsonRegisterResponse.containsKey('error')) {
-      // Si existe 'error', maneja el mensaje de error de la API
-      handleRegistrationError(response.statusCode, jsonRegisterResponse['error']);
-      throw Exception("Error proporcionado por la API: ${jsonRegisterResponse['error']}");
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('error')) {
+        // Si existe 'error', maneja el mensaje de error de la API
+        handleRegistrationError(
+            response.statusCode, jsonRegisterResponse['error']);
+        throw Exception(
+            "Error proporcionado por la API: ${jsonRegisterResponse['error']}");
       } else {
         throw Exception("Error desconocido al registrar usuario.");
       }
@@ -190,19 +191,22 @@ class ApiController {
     }
     return null;
   }
-  
-  // Controladores de texto de Inicio de Sesion y Registro
-  final TextEditingController nombreActualizarController = TextEditingController();
-  final TextEditingController apellidolActualizarController = TextEditingController();
-  final TextEditingController emailActualizarController = TextEditingController();
-  final TextEditingController phoneActualizarController = TextEditingController();
-  final TextEditingController documentActualizarController = TextEditingController();
+
+  // Controladores de texto de Actualizar Usuario por parte del Administrador
+  final TextEditingController nombreActualizarController =
+      TextEditingController();
+  final TextEditingController apellidolActualizarController =
+      TextEditingController();
+  final TextEditingController emailActualizarController =
+      TextEditingController();
+  final TextEditingController phoneActualizarController =
+      TextEditingController();
+  final TextEditingController documentActualizarController =
+      TextEditingController();
   final TextEditingController rolActualizarController = TextEditingController();
-  
+
   Future<int?> actualizarUsuarioDistri(String token) async {
     try {
-    
-
       Map<String, dynamic> regBodyActivo = {
         "name": nombreActualizarController.text,
         "surname": apellidolActualizarController.text,
@@ -210,13 +214,12 @@ class ApiController {
         "phone": phoneActualizarController.text,
         "document": documentActualizarController.text,
         "ou": rolActualizarController.text,
-
       };
 
       print(regBodyActivo);
 
       var response = await http.post(
-        Uri.parse("$actualizarUserUrl/$token"),
+        Uri.parse("$actualizarProfileUrl/$token"),
         headers: {
           "Content-Type": "application/json",
         },
@@ -231,14 +234,18 @@ class ApiController {
       if (response.statusCode == 200) {
         print("Usuario actualizado");
         return 200;
-      } else if (response.statusCode == 400 && jsonRegisterResponse.containsKey('message')) {
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('message')) {
         handleRegistrationError(
             response.statusCode, jsonRegisterResponse['message']);
         throw Exception("Usuario ya existente.");
-      } else if (response.statusCode == 400 && jsonRegisterResponse.containsKey('error')) {
-      // Si existe 'error', maneja el mensaje de error de la API
-      handleRegistrationError(response.statusCode, jsonRegisterResponse['error']);
-      throw Exception("Error proporcionado por la API: ${jsonRegisterResponse['error']}");
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('error')) {
+        // Si existe 'error', maneja el mensaje de error de la API
+        handleRegistrationError(
+            response.statusCode, jsonRegisterResponse['error']);
+        throw Exception(
+            "Error proporcionado por la API: ${jsonRegisterResponse['error']}");
       } else {
         throw Exception("Error desconocido al actualizar usuario.");
       }
@@ -248,11 +255,10 @@ class ApiController {
     return null;
   }
 
-  Future<Map<String, dynamic>> obtenerUsuariosDistri(String rol, String token) async {
+  // Obtener lista Usuarios
+  Future<Map<String, dynamic>> obtenerUsuariosDistri(
+      String rol, String token) async {
     try {
-      
- 
-
       var response = await http.post(
         Uri.parse("$obtenerUserUrl/$rol/$token"),
         headers: {
@@ -277,22 +283,20 @@ class ApiController {
     return {};
   }
 
-  Future<int?> eliminarUsuariosDistri(String email, String rol, String token) async {
+  //Eliminar un usuario por parte del admin
+  Future<int?> eliminarUsuariosDistri(
+      String email, String rol, String token) async {
     try {
-      
- 
       Map<String, dynamic> regBody = {
         "email": email,
         "ou": rol,
       };
 
-      var response = await http.post(
-        Uri.parse("$eliminarUserUrl/$token"),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode(regBody)
-      );
+      var response = await http.post(Uri.parse("$eliminarUserUrl/$token"),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode(regBody));
 
       var jsonRegisterResponse = jsonDecode(response.body);
 
@@ -312,7 +316,97 @@ class ApiController {
   }
 
 
+  /// APARTADO DEL EMPLEADO
 
+  // Obtener Datos Personales de un empleado
+  Future<Map<String, dynamic>> obtenerDatosPersonalesDistri(
+      String email) async {
+    try {
+      var response = await http.get(
+        Uri.parse("$obtenerDatosPersonalesUrl/$email"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+
+      var jsonRegisterResponse = jsonDecode(response.body);
+
+      print(
+          "este es el response $jsonRegisterResponse y el codigo ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        print("Datos Personales Obtenidos");
+        return jsonRegisterResponse['usuario'];
+      } else {
+        throw Exception("Error desconocido al obtener datos personales.");
+      }
+    } catch (e) {
+      print("Error al realizar la peticion: $e");
+    }
+    return {};
+  }
+
+  final TextEditingController nombrePerfilController =
+      TextEditingController();
+  final TextEditingController apellidolPerfilController =
+      TextEditingController();
+  final TextEditingController emailPerfilController =
+      TextEditingController();
+  final TextEditingController phonePerfilController =
+      TextEditingController();
+  final TextEditingController documentPerfilController =
+      TextEditingController();
+  final TextEditingController rolPerfilController = TextEditingController();
+
+  Future<int?> actualizarPerfilEmpleadoDistri(String token) async {
+    try {
+      Map<String, dynamic> regBodyActivo = {
+        "name": nombrePerfilController.text,
+        "surname": apellidolPerfilController.text,
+        "email": emailPerfilController.text,
+        "phone": phonePerfilController.text,
+        "document": documentPerfilController.text,
+        "ou": rolPerfilController.text,
+      };
+
+      print(regBodyActivo);
+
+      var response = await http.post(
+        Uri.parse("$actualizarProfileUrl/$token"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(regBodyActivo),
+      );
+
+      var jsonRegisterResponse = jsonDecode(response.body);
+
+      print(
+          "este es el response $jsonRegisterResponse y el codigo ${response.statusCode}");
+
+      if (response.statusCode == 200) {
+        print("Usuario actualizado");
+        return 200;
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('message')) {
+        handleRegistrationError(
+            response.statusCode, jsonRegisterResponse['message']);
+        throw Exception("Usuario ya existente.");
+      } else if (response.statusCode == 400 &&
+          jsonRegisterResponse.containsKey('error')) {
+        // Si existe 'error', maneja el mensaje de error de la API
+        handleRegistrationError(
+            response.statusCode, jsonRegisterResponse['error']);
+        throw Exception(
+            "Error proporcionado por la API: ${jsonRegisterResponse['error']}");
+      } else {
+        throw Exception("Error desconocido al actualizar usuario.");
+      }
+    } catch (e) {
+      print("Error al realizar la peticion: $e");
+    }
+    return null;
+  }
 
 
 

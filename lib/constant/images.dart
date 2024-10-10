@@ -10,3 +10,6 @@ const String cAddUser = 'images/agregar-usuario.png';
 
 //Imagenes para el profile
 const String cEditProfile = 'images/profile.png';
+
+//Imagenes para apartado de servicio del empleado
+const String cAddALbum = 'images/add_album.svg';

@@ -1,5 +1,8 @@
 import 'package:districorp/constant/sizes.dart';
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
+import 'package:districorp/controller/providers/token_provider.dart';
+import 'package:districorp/controller/services/api.dart';
+import 'package:districorp/models/profile_models.dart';
 import 'package:districorp/screen/Employee/Panel_album_empleado.dart';
 import 'package:districorp/screen/Employee/Panel_files_empelado.dart';
 import 'package:districorp/screen/Employee/Panel_perfil_empleado.dart';
@@ -11,6 +14,7 @@ import 'package:districorp/widgets/drawer_tile.dart';
 import 'package:districorp/widgets/gradient_appbar_total.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 
 class EmployeePanelPage extends StatefulWidget {
@@ -23,6 +27,7 @@ class EmployeePanelPage extends StatefulWidget {
 }
 
 class _EmployeePanelPageState extends State<EmployeePanelPage> {
+  ApiController apiController = ApiController();
   // Controla el estado del hover
   bool _isHovered = false;
 
@@ -37,7 +42,9 @@ class _EmployeePanelPageState extends State<EmployeePanelPage> {
       String currentPath = ModalRoute.of(context)?.settings.name ?? '/';
       provider.updateIndexFromUrl(currentPath);
     });
+    
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +99,13 @@ class _EmployeePanelPageState extends State<EmployeePanelPage> {
                         DrawerTile(
                           size: size,
                           texto: "Home",
-                          
                           icono: Icons.other_houses_rounded,
                           onTap: () {
                             // Actualizar el indice de las paginas
                             employeeProvider.updateSelectedIndex(0);
-                            Get.to(() => EmployeePanelPage(child: EmployeeHome(),));
+                            Get.to(() => EmployeePanelPage(
+                                  child: EmployeeHome(),
+                                ));
                           },
                           selected: employeeProvider.selectedIndex == 0,
                           color: Colors.amber,

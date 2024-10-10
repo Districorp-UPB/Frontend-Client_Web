@@ -8,9 +8,11 @@ const registerUserUrl = "$iPv4/api/register";
 
 // Urls de actulizar
 const actualizarUserUrl = "$iPv4/api/edit";
+const actualizarProfileUrl = "$iPv4/api/editme";
 
 //Urls de obtener usuarios
 const obtenerUserUrl = "$iPv4/api/list";
+const obtenerDatosPersonalesUrl = "$iPv4/api/usuario";
 
 //Urls de delete usuarios
 const eliminarUserUrl = "$iPv4/api/delete";

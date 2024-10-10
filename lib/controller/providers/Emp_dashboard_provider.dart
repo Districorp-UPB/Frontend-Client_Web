@@ -1,3 +1,4 @@
+import 'package:districorp/models/profile_models.dart';
 import 'package:districorp/models/usuarios_models.dart';
 import 'package:districorp/screen/Employee/widgets/album_page_empleado.dart';
 import 'package:districorp/screen/Employee/widgets/files_page_empleado.dart';
@@ -48,6 +49,8 @@ class EmpDashboardProvider extends ChangeNotifier {
       _selectedIndex = 2; // Gestionar Streaming
     } else if (path.contains('/EmployeeAlbumPanelPage')) {
       _selectedIndex = 3; // Gestionar Album
+    } else if (path.contains('/EmployeeAddAlbumPanelPage')) {
+      _selectedIndex = 3; // Gestionar Album
     } else if (path.contains('/EmployeeFilesPanelPage')) {
       _selectedIndex = 4; // Gestionar Files
     }
@@ -64,6 +67,16 @@ class EmpDashboardProvider extends ChangeNotifier {
 
   void updateSelectedUser(Usuarios user) {
     _selectedUser = user;
+    notifyListeners();
+  }
+
+  // Modelo para los datos personales
+  late Profiles _selectedProfile;
+
+  Profiles get selectedProfiles => _selectedProfile;
+
+  void updateSelectedProfile(Profiles profile) {
+    _selectedProfile = profile;
     notifyListeners();
   }
 

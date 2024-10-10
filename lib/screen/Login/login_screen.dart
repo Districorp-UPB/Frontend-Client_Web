@@ -224,7 +224,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       break;
                                     case 'Admin':
                                       Get.to(() => MainPanelPage(
-                                          child: AdminUserManagementPage(tipoOu: 'User',)));
+                                              child: AdminUserManagementPage(
+                                            tipoOu: 'User',
+                                          )));
                                       break;
                                     default:
                                       // Manejo de rol no reconocido

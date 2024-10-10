@@ -44,8 +44,9 @@ class TokenProvider extends ChangeNotifier {
       return rol;      
     } 
     return null;
-    
   }
+
+
 
   // Para cuando se inicializa la app y verificar el estado
   Future<String?> getTokenU() async {
