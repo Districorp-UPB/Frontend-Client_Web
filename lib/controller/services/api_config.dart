@@ -19,5 +19,11 @@ const subirFotoUrl = "$iPv4/api/fileserver/grpc/upload/imagen";
 const subirVideoUrl = "$iPv4/api/fileserver/grpc/upload/video";
 const subirArchivoUrl = "$iPv4/api/fileserver/grpc/upload/archivo";
 
+//Url de obtener
+const obtenerFotosUrl = "$iPv4/api/fileserver/grpc/imagenes";
+const obtenerArchivosUrl = "$iPv4/api/fileserver/grpc/archivos";
+const obtenerVideosUrl = "$iPv4/api/fileserver/grpc/videos";
+
+
 //Urls de delete usuarios
 const eliminarUserUrl = "$iPv4/api/delete";

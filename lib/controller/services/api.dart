@@ -4,6 +4,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:districorp/controller/services/api_config.dart';
+import 'package:districorp/models/archivo_models.dart';
+import 'package:districorp/models/imagenes_models.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -514,6 +516,56 @@ Future<int?> subirArchivoEmpleadoDistri(String token, Uint8List fileBytes, Strin
   }
   return null;
 }
+
+Future<List<Imagen>> obtenerImagenesEmpleadoDistri(String token) async {
+  try {
+    var response = await http.get(
+      Uri.parse("$obtenerFotosUrl/$token"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print("Imágenes obtenidas");
+      var jsonRegisterResponse = jsonDecode(response.body);
+
+      // Convierte la respuesta JSON a una lista de objetos Imagen
+      List<Imagen> images = (jsonRegisterResponse as List)
+          .map((item) => Imagen.fromJson(item))
+          .toList();
+
+      return images; // Retorna la lista de imágenes
+    } else {
+      throw Exception("Error desconocido al obtener datos personales.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return [];
+}
+
+Future<List<Archivo>> obtenerArchivosEmpleadoDistri(String token) async {
+  try {
+    var response = await http.get(
+      Uri.parse("$obtenerArchivosUrl/$token"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+   if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Archivo.fromJson(data)).toList();
+    } else {
+      throw Exception("Error desconocido al obtener datos personales.");
+    }
+  } catch (e) {
+    print("Error al realizar la petición: $e");
+  }
+  return [];
+}
+
 
 
 

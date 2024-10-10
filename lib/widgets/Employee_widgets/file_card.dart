@@ -1,14 +1,18 @@
-import 'package:flutter/material.dart';
+import 'dart:html' as html;
+import 'package:districorp/models/archivo_models.dart';
+import 'package:flutter/material.dart';  // Asegúrate de importar el modelo correcto
 
 class FileCard extends StatelessWidget {
   final String title;
-  final String fileUrl; // Este es el archivo, no necesariamente una imagen
+  final Archivo archivo; // Usa el modelo Archivo en lugar de solo el URL
 
-  const FileCard({required this.title, required this.fileUrl});
+  const FileCard({required this.title, required this.archivo});
 
-  bool isImage(String url) {
-    // Simple función para verificar si el archivo es una imagen (puedes mejorarlo)
-    return url.endsWith('.jpg') || url.endsWith('.png');
+  void downloadFile(String url, String fileName) {
+    // Crea un elemento de anclaje
+    final anchor = html.AnchorElement(href: url)
+      ..setAttribute('download', fileName) // Usa el nombre del archivo para la descarga
+      ..click(); // Simula un clic para iniciar la descarga
   }
 
   @override
@@ -20,25 +24,15 @@ class FileCard extends StatelessWidget {
       elevation: 4,
       child: Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: isImage(fileUrl)
-                ? Image.asset(
-                    fileUrl,
-                    fit: BoxFit.fill,
-                    width: double.infinity,
-                    height: double.infinity,
-                  )
-                : Container(
-                    color: Colors.grey[300], // Fondo gris si no es imagen
-                    child: Center(
-                      child: Icon(
-                        Icons.insert_drive_file, // Ícono genérico de archivo
-                        size: 100,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                  ),
+          Container(
+            color: Colors.grey[300], // Fondo gris para cualquier archivo
+            child: Center(
+              child: Icon(
+                Icons.insert_drive_file, // Ícono de archivo
+                size: 100,
+                color: Colors.grey[700],
+              ),
+            ),
           ),
           // Nombre del archivo en la parte superior
           Positioned(
@@ -53,7 +47,6 @@ class FileCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // El `Expanded` permitirá que el texto ocupe el 85% del espacio disponible
                   Expanded(
                     flex: 87,
                     child: Text(
@@ -61,17 +54,20 @@ class FileCard extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                        overflow: TextOverflow.ellipsis, // Para manejar el texto largo
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1, // Asegura que no crezca verticalmente
+                      maxLines: 1,
                     ),
                   ),
-                  // Espacio para el `PopupMenuButton`, ocupará el 15%
                   Flexible(
                     flex: 13,
                     child: PopupMenuButton<String>(
                       onSelected: (value) {
-                        print("Opción seleccionada: $value");
+                        if (value == 'download') {
+                          downloadFile(archivo.fileUrl, archivo.nombreArchivo); // Descarga usando la URL
+                        } else {
+                          print("Opción seleccionada: $value");
+                        }
                       },
                       itemBuilder: (BuildContext context) {
                         return [
