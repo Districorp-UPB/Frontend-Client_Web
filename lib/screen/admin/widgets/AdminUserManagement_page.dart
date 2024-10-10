@@ -22,7 +22,8 @@ class AdminUserManagementPage extends StatefulWidget {
   const AdminUserManagementPage({super.key, required this.tipoOu});
 
   @override
-  _AdminUserManagementPageState createState() => _AdminUserManagementPageState();
+  _AdminUserManagementPageState createState() =>
+      _AdminUserManagementPageState();
 }
 
 class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
@@ -74,7 +75,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
       final token = await tokenProvider.verificarTokenU();
       if (token != null) {
-        var response = await apiController.obtenerUsuariosDistri(widget.tipoOu, token);
+        var response =
+            await apiController.obtenerUsuariosDistri(widget.tipoOu, token);
         var jsonResponse = response['users'] as List;
 
         List<Usuarios> fetchedUsers = jsonResponse.map((userJson) {
@@ -97,7 +99,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       final emailLower = user.email.toLowerCase();
       final nameLower = (user.nombre + " " + user.apellido).toLowerCase();
       final searchLower = query.toLowerCase();
-      return emailLower.contains(searchLower) || nameLower.contains(searchLower);
+      return emailLower.contains(searchLower) ||
+          nameLower.contains(searchLower);
     }).toList();
 
     setState(() {
@@ -111,7 +114,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       final token = await tokenProvider.verificarTokenU();
 
       if (token != null) {
-        await apiController.eliminarUsuariosDistri(user.email, user.rol);
+        await apiController.eliminarUsuariosDistri(user.email, user.rol, token);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -140,7 +143,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
           children: [
             Text(
               "Gestionar $rolTipoConvertido",
-              style: TextStyle(fontSize: cTitulosSize, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: cTitulosSize, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -155,7 +159,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                   ? RefreshIndicator(
                       onRefresh: fetchUsers,
                       child: GridView.builder(
-                        controller: _scrollController, // Vincular el ScrollController
+                        controller:
+                            _scrollController, // Vincular el ScrollController
                         physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: size.width > 1280 ? 3 : 2,
@@ -167,7 +172,9 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                         itemCount: filteredUsers.length,
                         itemBuilder: (context, index) {
                           return UserItem(
-                            name: filteredUsers[index].nombre + " " + filteredUsers[index].apellido,
+                            name: filteredUsers[index].nombre +
+                                " " +
+                                filteredUsers[index].apellido,
                             email: filteredUsers[index].email,
                             phone: filteredUsers[index].telefono,
                             onUpdate: () {
@@ -179,13 +186,19 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                             onDelete: () async {
                               Usuarios user = filteredUsers[index];
                               employeeProvider.updateSelectedUser(user);
-                              _deleteUser(employeeProvider.selectedUser, context);
+                              _deleteUser(
+                                  employeeProvider.selectedUser, context);
                             },
                           );
                         },
                       ),
                     )
-                  : Center(child: CupertinoActivityIndicator()),
+                  : Center(
+                      child: CircularProgressIndicator.adaptive(
+                      backgroundColor:
+                          Color.fromRGBO(235, 2, 56, 1), // Asignar la animación al color
+                      // Progreso (0.0 a 1.0)
+                    )),
             ),
           ],
         ),

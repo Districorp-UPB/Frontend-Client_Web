@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:districorp/controller/providers/Emp_dashboard_provider.dart';
+import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/controller/services/api.dart';
 import 'package:districorp/screen/admin/Panel_principal_admin.dart';
 import 'package:districorp/screen/admin/widgets/AdminUserManagement_page.dart';
@@ -95,6 +96,7 @@ ApiController apiController = ApiController();
             controller: apiController.emailActualizarController,
             errorText: emailError.isNotEmpty ? emailError : null,
             errorStyle: errorStyle,
+            enabled: false,
           ),
           const SizedBox(height: 16),
           CustomInput(
@@ -103,7 +105,7 @@ ApiController apiController = ApiController();
             controller: apiController.documentActualizarController,
             errorText: documentError.isNotEmpty ? documentError : null,
             errorStyle: errorStyle,
-            enabled: false,
+            
           ),
           const SizedBox(height: 16),
           CustomInput(
@@ -165,16 +167,21 @@ ApiController apiController = ApiController();
                 print(errorsRegister.values);
                 // Si no hay errores, proceder con el login
                 if (errorsRegister.values.every((error) => error.isEmpty)) {
-                  int? result = await apiController.actualizarUsuarioDistri();
-                  if (result == 200) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Usuario Actualizado Existosamente!"),
-                      behavior: SnackBarBehavior.floating,
-                      showCloseIcon: true,
-                    ));
+                  final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+                  final token = await tokenProvider.verificarTokenU();
+                  if (token != null) {
+                    int? result = await apiController.actualizarUsuarioDistri(token);
+                    if (result == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Usuario Actualizado Existosamente!"),
+                        behavior: SnackBarBehavior.floating,
+                        showCloseIcon: true,
+                      ));
 
-                    Get.to(() => MainPanelPage(
-                                child: AdminUserManagementPage(tipoOu: 'User',)));
+                      Get.to(() => MainPanelPage(
+                                  child: AdminUserManagementPage(tipoOu: 'User',)));
+                    }
+                    
                   }
                 }
               } catch (e) {

@@ -199,7 +199,7 @@ class ApiController {
   final TextEditingController documentActualizarController = TextEditingController();
   final TextEditingController rolActualizarController = TextEditingController();
   
-  Future<int?> actualizarUsuarioDistri() async {
+  Future<int?> actualizarUsuarioDistri(String token) async {
     try {
     
 
@@ -216,7 +216,7 @@ class ApiController {
       print(regBodyActivo);
 
       var response = await http.post(
-        Uri.parse(actualizarUserUrl),
+        Uri.parse("$actualizarUserUrl/$token"),
         headers: {
           "Content-Type": "application/json",
         },
@@ -277,7 +277,7 @@ class ApiController {
     return {};
   }
 
-  Future<int?> eliminarUsuariosDistri(String email, String rol) async {
+  Future<int?> eliminarUsuariosDistri(String email, String rol, String token) async {
     try {
       
  
@@ -287,7 +287,7 @@ class ApiController {
       };
 
       var response = await http.post(
-        Uri.parse("$eliminarUserUrl/"),
+        Uri.parse("$eliminarUserUrl/$token"),
         headers: {
           "Content-Type": "application/json",
         },

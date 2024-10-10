@@ -1,5 +1,5 @@
-
-const iPv4 = "http://sistema3.bucaramanga.upb.edu.co:4000"; //IP de la máquina donde está corriendo el CCA del web server
+const iPv4 =
+    "http://sistema3.bucaramanga.upb.edu.co:4000"; //IP de la máquina donde está corriendo el CCA del web server
 
 // Urls de login y registro
 const loginUrl = "$iPv4/api/authenticate";
@@ -14,8 +14,3 @@ const obtenerUserUrl = "$iPv4/api/list";
 
 //Urls de delete usuarios
 const eliminarUserUrl = "$iPv4/api/delete";
-
-
-
-
-
