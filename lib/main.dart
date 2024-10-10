@@ -27,15 +27,19 @@ void main() async {
 
   // Llamar al método verificarTokenU() y esperar su resultado si existe token
   String? token = await tokenProvider.getTokenU();
+
+  // LLamar el metodo de getRolU() y saber si el token si existe que rol pertenece
+  String? rol = await tokenProvider.getRolU(token);
+ 
   setUrlStrategy(PathUrlStrategy());
   runApp(MyApp(
-    token: token,
+    rol: rol,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final String? token;
-  const MyApp({super.key, this.token});
+  final String? rol;
+  const MyApp({super.key, this.rol});
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +61,8 @@ class MyApp extends StatelessWidget {
               Transition.fadeIn, // Define el tipo de transición por defecto
           transitionDuration: const Duration(
               milliseconds: 400), // Duración global para las transiciones
-          initialRoute: '/MainPanelPage',
-          // initialRoute: (token != null) ? '/MainPanelPage':'/LoginScreen',
+
+          initialRoute: _getInitialRoute(rol),
           theme: ThemeData(
             primarySwatch: Colors.purple,
           ),
@@ -98,6 +102,18 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+  // Método para determinar la ruta inicial según el rol
+  String _getInitialRoute(String? rol) {
+    if (rol == null) {
+      return '/LoginScreen';
+    } else if (rol == 'Admin') {
+      return '/MainPanelPage';
+    } else if (rol == 'Employee') {
+      return '/EmployeePanelPage';
+    }
+    return '/LoginScreen'; // Por defecto
+  }
 
 class MyBehavior extends ScrollBehavior {
   @override

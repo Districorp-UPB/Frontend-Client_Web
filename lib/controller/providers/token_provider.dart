@@ -35,6 +35,18 @@ class TokenProvider extends ChangeNotifier {
     return decodedToken;
   }
 
+  String? getRolU(String? token) {
+    // Decodifica el token JWT y devuelve un mapa con los datos decodificados
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      String rol = decodedToken['ou'];
+      print(rol);
+      return rol;      
+    } 
+    return null;
+    
+  }
+
   // Para cuando se inicializa la app y verificar el estado
   Future<String?> getTokenU() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,9 +67,6 @@ class TokenProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', result);
   }
-
-
-
 
 
   Future<void> eliminarTokenU() async {
