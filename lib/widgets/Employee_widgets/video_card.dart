@@ -1,10 +1,10 @@
-import 'dart:html' as html;  // Importa el paquete html para web
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';  // Importa video_player para mostrar videos
+import 'package:video_player/video_player.dart';
 
 class VideoCard extends StatefulWidget {
   final String title;
-  final String videoUrl;  // URL del video para mostrar y descargar
+  final String videoUrl;
 
   const VideoCard({required this.title, required this.videoUrl});
 
@@ -13,28 +13,41 @@ class VideoCard extends StatefulWidget {
 }
 
 class _VideoCardState extends State<VideoCard> {
-  late VideoPlayerController _controller;  // Controlador del video
+  late VideoPlayerController _controller;
+  bool isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl)) 
       ..initialize().then((_) {
-        setState(() {});  // Actualiza el estado cuando se haya inicializado el video
+        setState(() {});
       });
   }
 
   @override
   void dispose() {
-    _controller.dispose();  // Libera el controlador cuando se destruye el widget
+    _controller.dispose();
     super.dispose();
   }
 
   void downloadVideo(String url) {
-    // Crea un elemento de anclaje
     final anchor = html.AnchorElement(href: url)
-      ..setAttribute('download', widget.title)  // Usa el título como nombre del archivo
-      ..click();  // Simula un clic en el anclaje para iniciar la descarga
+      ..setAttribute('download', widget.title)
+      ..click();
+  }
+
+  void togglePlayPause() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+        isPlaying = false;
+      } else {
+        _controller.play();
+        isPlaying = true;
+      }
+    });
   }
 
   @override
@@ -49,11 +62,20 @@ class _VideoCardState extends State<VideoCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: _controller.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                ? GestureDetector(
+                    onTap: togglePlayPause,
+                    child: SizedBox.expand(
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: _controller.value.size.width,
+                          height: _controller.value.size.height,
+                          child: VideoPlayer(_controller),
+                        ),
+                      ),
+                    ),
                   )
-                : Center(child: CircularProgressIndicator()),  // Muestra un cargador si el video no está listo
+                : Center(child: CircularProgressIndicator()),
           ),
           Positioned(
             top: 0,
@@ -84,9 +106,7 @@ class _VideoCardState extends State<VideoCard> {
                     child: PopupMenuButton<String>(
                       onSelected: (value) {
                         if (value == 'download') {
-                          downloadVideo(widget.videoUrl);  // Llama a la función de descarga
-                        } else {
-                          print("Opción seleccionada: $value");
+                          downloadVideo(widget.videoUrl);
                         }
                       },
                       itemBuilder: (BuildContext context) {
@@ -113,6 +133,32 @@ class _VideoCardState extends State<VideoCard> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          // Botón de Play/Pause
+          Align(
+            alignment: Alignment.center,
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  colors: [
+                    Color.fromRGBO(235, 2, 56, 1),
+                    Color.fromRGBO(120, 50, 220, 1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ).createShader(bounds);
+              },
+              child: IconButton(
+                icon: Icon(
+                  isPlaying
+                      ? Icons.pause_circle_filled
+                      : Icons.play_circle_fill,
+                  color: Colors.white,
+                  size: 50,
+                ),
+                onPressed: togglePlayPause,
               ),
             ),
           ),

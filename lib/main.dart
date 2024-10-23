@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player_media_kit/video_player_media_kit.dart';
+
 
 void main() async {
   // Garantiza que los widgets estén inicializados antes de ejecutar la aplicación.
@@ -35,17 +35,11 @@ void main() async {
   // LLamar el metodo de getRolU() y saber si el token si existe que rol pertenece
   String? rol = await tokenProvider.getRolU(token);
 
-   VideoPlayerMediaKit.ensureInitialized(
-    macOS: true,
-    windows: true,
-    linux: true,
-    android: true,
-    web: true
-  );
 
   setUrlStrategy(PathUrlStrategy());
   runApp(MyApp(
     rol: rol,
+    
   ));
 }
 

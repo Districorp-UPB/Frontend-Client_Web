@@ -107,7 +107,7 @@ class _EmployeeStreamingState extends State<EmployeeStreaming> {
 
                       return VideoCard(
                         title: video.nombreArchivo,
-                        videoUrl: video.binaryFile, // Cambia aquí para la reproducción del video
+                        videoUrl: video.url, // Cambia aquí para la reproducción del video
                       );
                     },
                   );

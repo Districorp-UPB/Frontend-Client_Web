@@ -127,32 +127,76 @@ class _AddStreamingEmpleadoState extends State<AddStreamingEmpleado> {
                         ),
                         const SizedBox(height: 20),
                         CustomButton(
-                          icon: Icons.arrow_circle_down_outlined,
-                          text: 'Subir',
-                          onPressed: () async {
-                            final token = await tokenProvider.verificarTokenU();
-                            if (token != null && _imgBytes != null) {
-                              // Usa el nombre del archivo obtenido del FilePicker
-                              String fileName = _fileName ??
-                                  'video_por_defecto.mp4'; // Nombre por defecto si no hay archivo
+  icon: Icons.arrow_circle_down_outlined,
+  text: 'Subir',
+  onPressed: () async {
+    final token = await tokenProvider.verificarTokenU();
+    if (token != null && _imgBytes != null) {
+      // Usa el nombre del archivo obtenido del FilePicker
+      String fileName = _fileName ?? 'video_por_defecto.mp4'; // Nombre por defecto si no hay archivo
 
-                              int? result =
-                                  await apiController.subirVideoEmpleadoDistri(
-                                      token, _imgBytes!, fileName);
+      // Mostrar un diálogo con un indicador de carga
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Evita que se cierre al tocar fuera
+        builder: (BuildContext context) {
+          return Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 10),
+                  Text("Subiendo..."),
+                ],
+              ),
+            ),
+          );
+        },
+      );
 
-                              if (result == 200) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text("Video subido exitosamente!"),
-                                  behavior: SnackBarBehavior.floating,
-                                  showCloseIcon: true,
-                                ));
+      // Llama al método para subir el video
+      int? result = await apiController.subirVideoEmpleadoDistri(
+        token,
+        _imgBytes!, // Se usa _imgBytes que ya es de tipo Uint8List
+        fileName
+      );
 
-                                Get.to(() => EmployeeAlbumPanelPage());
-                              }
-                            }
-                          },
-                        ),
+      // Cerrar el indicador de carga
+      Navigator.of(context).pop();
+
+      // Mostrar el SnackBar con el resultado
+      if (result == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Video subido exitosamente!"),
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon: true,
+          ),
+        );
+
+        // Navegar a la siguiente página
+        Get.to(() => EmployeeAlbumPanelPage());
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Error al subir el video."),
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon: true,
+          ),
+        );
+      }
+    }
+  },
+),
+
                       ],
                     ),
                   ),

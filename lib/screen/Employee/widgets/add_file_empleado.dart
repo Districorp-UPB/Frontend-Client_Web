@@ -3,6 +3,7 @@ import 'package:districorp/constant/images.dart';
 import 'package:districorp/controller/providers/token_provider.dart';
 import 'package:districorp/controller/services/api.dart';
 import 'package:districorp/screen/Employee/Panel_album_empleado.dart';
+import 'package:districorp/screen/Employee/Panel_files_empelado.dart';
 import 'package:districorp/widgets/custom_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -130,22 +131,65 @@ class _AddFileEmpleadoState extends State<AddFileEmpleado> {
                               String fileName =
                                   _fileName ?? 'archivo_por_defecto.file';
 
+                              // Mostrar un diálogo con un indicador de carga
+                              showDialog(
+                                context: context,
+                                barrierDismissible:
+                                    false, // Evita que se cierre al tocar fuera
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: Container(
+                                      
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          CircularProgressIndicator(),
+                                          SizedBox(height: 10),
+                                          Text("Subiendo..."),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+
                               // Llama al método para subir el archivo
                               int? result = await apiController
                                   .subirArchivoEmpleadoDistri(
                                       token,
-                                      _fileBytes!,
-                                      fileName); // Se usa _fileBytes que ya es de tipo Uint8List
+                                      _fileBytes!, // Se usa _fileBytes que ya es de tipo Uint8List
+                                      fileName);
 
+                              // Cerrar el indicador de carga
+                              Navigator.of(context).pop();
+
+                              // Mostrar el SnackBar con el resultado
                               if (result == 200) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text("Archivo subido exitosamente!"),
-                                  behavior: SnackBarBehavior.floating,
-                                  showCloseIcon: true,
-                                ));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text("Archivo subido exitosamente!"),
+                                    behavior: SnackBarBehavior.floating,
+                                    showCloseIcon: true,
+                                  ),
+                                );
 
-                                Get.to(() => EmployeeAlbumPanelPage());
+                                // Navegar a la siguiente página
+                                Get.to(() => EmployeeFilesPanelPage());
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Error al subir el archivo."),
+                                    behavior: SnackBarBehavior.floating,
+                                    showCloseIcon: true,
+                                  ),
+                                );
                               }
                             }
                           },

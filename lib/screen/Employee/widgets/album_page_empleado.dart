@@ -49,7 +49,8 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
 
   void filterAlbum(String query) {
     final filtered = filteredAlbums.where((album) {
-      final nameLower = album.nombreArchivo.toLowerCase(); // Cambiar a 'nombreArchivo'
+      final nameLower =
+          album.nombreArchivo.toLowerCase(); // Cambiar a 'nombreArchivo'
       final searchLower = query.toLowerCase();
       return nameLower.contains(searchLower);
     }).toList();
@@ -106,13 +107,13 @@ class _EmployeeAlbumState extends State<EmployeeAlbum> {
                     itemBuilder: (context, index) {
                       try {
                         final album = albums[index];
-                        print("Contenido del álbum completo: $album");
+                        print("Contenido del álbum completo: ${album}");
 
                         return AlbumCard(
-                          title: album.nombreArchivo,
-                          image: NetworkImage(album.imageUrl), // Cambia aquí a image
-                          imageUrl: album.imageUrl
-                        );
+                            title: album.nombreArchivo,
+                            image: NetworkImage(
+                                album.imageUrl), // Cambia aquí a image
+                            imageUrl: album.imageUrl);
                       } catch (e) {
                         print("Error al decodificar la imagen: $e");
                         return Container(); // Retorna un contenedor vacío en caso de error

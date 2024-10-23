@@ -33,7 +33,8 @@ class EmployeeHome extends StatelessWidget {
                 alignment: WrapAlignment.center, // Centra las tarjetas
                 children: List.generate(3, (index) {
                   return SizedBox(
-                    width: (constraints.maxWidth / crossAxisCount) - 16, // Ajusta el ancho de las tarjetas
+                    width: (constraints.maxWidth / crossAxisCount) -
+                        16, // Ajusta el ancho de las tarjetas
                     child: _buildInfoCard(index, employeeProvider, size),
                   );
                 }),
@@ -51,7 +52,7 @@ class EmployeeHome extends StatelessWidget {
         'titulo': 'Streaming',
         'subContenido':
             'Transmite videos y audios sin necesidad de descargarlos. Reproduce tu contenido multimedia.',
-        'imageUrl': 'assets/playimage.jpg',
+        'imageUrl': 'playimage.jpg',
         'txtbtn': 'Mirar',
         'function': () {
           provider.updateSelectedIndex(2);
@@ -62,7 +63,7 @@ class EmployeeHome extends StatelessWidget {
         'titulo': 'Photo Album',
         'subContenido':
             'Organiza y guarda tus fotos en álbumes digitales accesibles desde cualquier dispositivo.',
-        'imageUrl': 'assets/photo_album.png',
+        'imageUrl': 'photo_album.png',
         'txtbtn': 'Ingresar',
         'function': () {
           provider.updateSelectedIndex(3);
@@ -73,7 +74,7 @@ class EmployeeHome extends StatelessWidget {
         'titulo': 'Shared Files',
         'subContenido':
             'Gestiona, sube y comparte archivos con tus compañeros de trabajo.',
-        'imageUrl': 'assets/files.png',
+        'imageUrl': 'files.png',
         'txtbtn': 'Ingresar',
         'function': () {
           provider.updateSelectedIndex(4);
@@ -121,10 +122,12 @@ class InfoCard extends StatelessWidget {
         onTap: function,
         borderRadius: BorderRadius.circular(10),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, // Esto hace que el contenido se expanda
+          crossAxisAlignment: CrossAxisAlignment
+              .center, // Esto hace que el contenido se expanda
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(10)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.asset(

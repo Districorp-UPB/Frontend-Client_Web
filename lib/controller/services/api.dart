@@ -320,7 +320,6 @@ class ApiController {
     return null;
   }
 
-
   /// APARTADO DEL EMPLEADO
 
   // Obtener Datos Personales de un empleado
@@ -351,14 +350,11 @@ class ApiController {
     return {};
   }
 
-  final TextEditingController nombrePerfilController =
-      TextEditingController();
+  final TextEditingController nombrePerfilController = TextEditingController();
   final TextEditingController apellidolPerfilController =
       TextEditingController();
-  final TextEditingController emailPerfilController =
-      TextEditingController();
-  final TextEditingController phonePerfilController =
-      TextEditingController();
+  final TextEditingController emailPerfilController = TextEditingController();
+  final TextEditingController phonePerfilController = TextEditingController();
   final TextEditingController documentPerfilController =
       TextEditingController();
   final TextEditingController rolPerfilController = TextEditingController();
@@ -413,185 +409,179 @@ class ApiController {
     return null;
   }
 
-Future<int?> subirFotoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
-  try {
-    
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse("$subirFotoUrl/$token"),
-    );
+  Future<int?> subirFotoEmpleadoDistri(
+      String token, Uint8List fileBytes, String fileName) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$subirFotoUrl/$token"),
+      );
 
-    // Adjunta la imagen al request como un archivo de 'form-data'
-    request.files.add(http.MultipartFile.fromBytes(
-      'image', 
-      fileBytes,
-      filename: fileName, 
-    ));
+      // Adjunta la imagen al request como un archivo de 'form-data'
+      request.files.add(http.MultipartFile.fromBytes(
+        'image',
+        fileBytes,
+        filename: fileName,
+      ));
 
-    
-    var response = await request.send();
-    var responseData = await http.Response.fromStream(response);
+      var response = await request.send();
+      var responseData = await http.Response.fromStream(response);
 
-    var jsonRegisterResponse = jsonDecode(responseData.body);
+      var jsonRegisterResponse = jsonDecode(responseData.body);
 
-    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+      print(
+          "Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
 
-    if (response.statusCode == 200) {
-      print("Foto subida exitosamente");
-      return 200;
-    } else {
-      throw Exception("Error desconocido al subir foto.");
+      if (response.statusCode == 200) {
+        print("Foto subida exitosamente");
+        return 200;
+      } else {
+        throw Exception("Error desconocido al subir foto.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return null;
   }
-  return null;
-}
 
-Future<int?> subirVideoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
-  try {
-    
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse("$subirVideoUrl/$token"),
-    );
+  Future<int?> subirVideoEmpleadoDistri(
+      String token, Uint8List fileBytes, String fileName) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$subirVideoUrl/$token"),
+      );
 
-    // Adjunta la imagen al request como un archivo de 'form-data'
-    request.files.add(http.MultipartFile.fromBytes(
-      'video', 
-      fileBytes,
-      filename: fileName, 
-    ));
+      // Adjunta la imagen al request como un archivo de 'form-data'
+      request.files.add(http.MultipartFile.fromBytes(
+        'video',
+        fileBytes,
+        filename: fileName,
+      ));
 
-    
-    var response = await request.send();
-    var responseData = await http.Response.fromStream(response);
+      var response = await request.send();
+      var responseData = await http.Response.fromStream(response);
 
-    var jsonRegisterResponse = jsonDecode(responseData.body);
+      var jsonRegisterResponse = jsonDecode(responseData.body);
 
-    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+      print(
+          "Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
 
-    if (response.statusCode == 200) {
-      print("Video subida exitosamente");
-      return 200;
-    } else {
-      throw Exception("Error desconocido al subir video.");
+      if (response.statusCode == 200) {
+        print("Video subida exitosamente");
+        return 200;
+      } else {
+        throw Exception("Error desconocido al subir video.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return null;
   }
-  return null;
-}
 
-Future<int?> subirArchivoEmpleadoDistri(String token, Uint8List fileBytes, String fileName) async {
-  try {
-    
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse("$subirArchivoUrl/$token"),
-    );
+  Future<int?> subirArchivoEmpleadoDistri(
+      String token, Uint8List fileBytes, String fileName) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$subirArchivoUrl/$token"),
+      );
 
-    // Adjunta la imagen al request como un archivo de 'form-data'
-    request.files.add(http.MultipartFile.fromBytes(
-      'file', 
-      fileBytes,
-      filename: fileName, 
-    ));
+      // Adjunta la imagen al request como un archivo de 'form-data'
+      request.files.add(http.MultipartFile.fromBytes(
+        'file',
+        fileBytes,
+        filename: fileName,
+      ));
 
-    
-    var response = await request.send();
-    var responseData = await http.Response.fromStream(response);
+      var response = await request.send();
+      var responseData = await http.Response.fromStream(response);
 
-    var jsonRegisterResponse = jsonDecode(responseData.body);
+      var jsonRegisterResponse = jsonDecode(responseData.body);
 
-    print("Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
+      print(
+          "Este es el response $jsonRegisterResponse y el código ${response.statusCode}");
 
-    if (response.statusCode == 200) {
-      print("Archivo subido exitosamente");
-      return 200;
-    } else {
-      throw Exception("Error desconocido al subir archivo.");
+      if (response.statusCode == 200) {
+        print("Archivo subido exitosamente");
+        return 200;
+      } else {
+        throw Exception("Error desconocido al subir archivo.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return null;
   }
-  return null;
-}
 
-Future<List<Imagen>> obtenerImagenesEmpleadoDistri(String token) async {
-  try {
-    var response = await http.get(
-      Uri.parse("$obtenerFotosUrl/$token"),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
+  Future<List<Imagen>> obtenerImagenesEmpleadoDistri(String token) async {
+    try {
+      var response = await http.get(
+        Uri.parse("$obtenerFotosUrl/$token"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
 
-    if (response.statusCode == 200) {
-      print("Imágenes obtenidas");
-      var jsonRegisterResponse = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print("Imágenes obtenidas");
+        var jsonRegisterResponse = jsonDecode(response.body);
 
-      // Convierte la respuesta JSON a una lista de objetos Imagen
-      List<Imagen> images = (jsonRegisterResponse as List)
-          .map((item) => Imagen.fromJson(item))
-          .toList();
+        // Convierte la respuesta JSON a una lista de objetos Imagen
+        List<Imagen> images = (jsonRegisterResponse as List)
+            .map((item) => Imagen.fromJson(item))
+            .toList();
 
-      return images; // Retorna la lista de imágenes
-    } else {
-      throw Exception("Error desconocido al obtener imagenes.");
+        return images; // Retorna la lista de imágenes
+      } else {
+        throw Exception("Error desconocido al obtener imagenes.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return [];
   }
-  return [];
-}
 
-Future<List<Archivo>> obtenerArchivosEmpleadoDistri(String token) async {
-  try {
-    var response = await http.get(
-      Uri.parse("$obtenerArchivosUrl/$token"),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
+  Future<List<Archivo>> obtenerArchivosEmpleadoDistri(String token) async {
+    try {
+      var response = await http.get(
+        Uri.parse("$obtenerArchivosUrl/$token"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
 
-   if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => Archivo.fromJson(data)).toList();
-    } else {
-      throw Exception("Error desconocido al obtener archivos.");
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => Archivo.fromJson(data)).toList();
+      } else {
+        throw Exception("Error desconocido al obtener archivos.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return [];
   }
-  return [];
-}
 
-Future<List<Video>> obtenerVideosEmpleadoDistri(String token) async {
-  try {
-    var response = await http.get(
-      Uri.parse("$obtenerVideosUrl/$token"),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
+  Future<List<Video>> obtenerVideosEmpleadoDistri(String token) async {
+    try {
+      print("$obtenerVideosUrl");
+      var response = await http.get(
+        Uri.parse("$obtenerVideosUrl/$token"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
 
-   if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => Video.fromJson(data)).toList();
-    } else {
-      throw Exception("Error desconocido al obtener videos.");
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => Video.fromJson(data)).toList();
+      } else {
+        throw Exception("Error desconocido al obtener videos.");
+      }
+    } catch (e) {
+      print("Error al realizar la petición: $e");
     }
-  } catch (e) {
-    print("Error al realizar la petición: $e");
+    return [];
   }
-  return [];
-}
-
-
-
-
-
-
-
 }
